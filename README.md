@@ -6,3 +6,5 @@
 /)
 
 Python Wrapper to access and distribute data from a WeatherFlow Weather Station using a REST API
+
+When this is done, it will replace the previous module [`pysmartweatherio`](https://github.com/briis/pysmartweatherio)
