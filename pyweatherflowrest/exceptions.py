@@ -18,5 +18,9 @@ class NotAuthorized(ClientError):
     """Wrong API Token."""
 
 
+class WrongStationID(ClientError):
+    """Station ID does not exist."""
+
+
 class ApiError(ClientError):
     """Other error."""

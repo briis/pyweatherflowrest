@@ -40,6 +40,16 @@ class ObservationDescription:
     delta_t: float | None = None
     air_density: float | None = None
     pressure_trend: str | None = None
+    voltage_air: float | None = None
+    voltage_sky: float | None = None
+    voltage_tempest: float | None = None
+    units_temp: str | None = None
+    units_wind: str | None = None
+    units_precip: str | None = None
+    units_pressure: str | None = None
+    units_distance: str | None = None
+    units_direction: str | None = None
+    units_other: str | None = None
 
 @dataclass
 class StationDescription:
@@ -48,17 +58,27 @@ class StationDescription:
     """This is the Key identifier for this entity"""
     key: int
 
-    station_name: str | None = None
+    name: str | None = None
     public_name: str | None = None
     latitude: float | None = None
     longitude: float | None = None
     timezone: str | None = None
     elevation: int | None = None
-    units_temp: str | None = None
-    units_wind: str | None = None
-    units_precip: str | None = None
-    units_pressure: str | None = None
-    units_distance: str | None = None
-    units_direction: str | None = None
-    units_other: str | None = None
+    is_tempest: bool | None = False
+    hub_device_id: int | None = None
+    hub_hardware_revision: int | None = None
+    hub_firmware_revision: int | None = None
+    hub_serial_number: int | None = None
+    tempest_device_id: int | None = None
+    tempest_hardware_revision: int | None = None
+    tempest_firmware_revision: int | None = None
+    tempest_serial_number: int | None = None
+    air_device_id: int | None = None
+    air_hardware_revision: int | None = None
+    air_firmware_revision: int | None = None
+    air_serial_number: int | None = None
+    sky_device_id: int | None = None
+    sky_hardware_revision: int | None = None
+    sky_firmware_revision: int | None = None
+    sky_serial_number: int | None = None
     
