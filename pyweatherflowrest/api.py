@@ -54,10 +54,42 @@ class WeatherFlowApiClient:
             entity_data = ObservationDescription(
                 key=self.station_id,
                 timestamp=obervations["timestamp"],
-                air_temperature=obervations["air_temperature"]
+                air_temperature=obervations["air_temperature"],
+                barometric_pressure=obervations["barometric_pressure"],
+                station_pressure=obervations["station_pressure"],
+                sea_level_pressure=obervations["sea_level_pressure"],
+                relative_humidity=obervations["relative_humidity"],
+                precip=obervations["precip"],
+                precip_accum_last_1hr=obervations["precip_accum_last_1hr"],
+                precip_accum_local_day=obervations["precip_accum_local_day"],
+                precip_accum_local_yesterday=obervations["precip_accum_local_yesterday"],
+                precip_minutes_local_day=obervations["precip_minutes_local_day"],
+                precip_minutes_local_yesterday=obervations["precip_minutes_local_yesterday"],
+                wind_avg=obervations["wind_avg"],
+                wind_direction=obervations["wind_direction"],
+                wind_gust=obervations["wind_gust"],
+                wind_lull=obervations["wind_lull"],
+                solar_radiation=obervations["solar_radiation"],
+                uv=obervations["uv"],
+                brightness=obervations["brightness"],
+                lightning_strike_last_epoch=obervations["lightning_strike_last_epoch"],
+                lightning_strike_last_distance=obervations["lightning_strike_last_distance"],
+                lightning_strike_count=obervations["lightning_strike_count"],
+                lightning_strike_count_last_1hr=obervations["lightning_strike_count_last_1hr"],
+                lightning_strike_count_last_3hr=obervations["lightning_strike_count_last_3hr"],
+                feels_like=obervations["feels_like"],
+                heat_index=obervations["heat_index"],
+                wind_chill=obervations["wind_chill"],
+                dew_point=obervations["dew_point"],
+                wet_bulb_temperature=obervations["wet_bulb_temperature"],
+                delta_t=obervations["delta_t"],
+                air_density=obervations["air_density"],
+                pressure_trend=obervations["pressure_trend"],
             )
 
-        return entity_data
+            return entity_data
+
+        return None
 
     async def api_request(
         self,
@@ -65,7 +97,10 @@ class WeatherFlowApiClient:
         ) -> None:
         """Get data from WeatherFlow API"""
 
-        async with self.req.get(url) as resp:
-            data = await resp.json()
-            return data
+        try:
+            async with self.req.get(url) as resp:
+                data = await resp.json()
+                return data
 
+        except client_exceptions.ClientError as err:
+            raise ApiError(f"Error requesting data from WeatherFlow: {err}") from None
