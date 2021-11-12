@@ -252,7 +252,11 @@ class WeatherFlowApiClient:
                 precip_minutes_local_yesterday=current["precip_minutes_local_yesterday"],
             )
 
-            forecast_daily = data["forecast"]["daily"]            
+            forecast_daily = data["forecast"]["daily"]
+
+            entity_data.temp_high_today = forecast_daily[0]["air_temp_high"]          
+            entity_data.temp_low_today = forecast_daily[0]["air_temp_low"]          
+
             for item in forecast_daily:
                 day_item = ForecastDailyDescription(
                     timestamp = item["day_start_local"],

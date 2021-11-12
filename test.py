@@ -43,9 +43,11 @@ async def main() -> None:
         for field in data.__dataclass_fields__:
             value = getattr(data, field)
             if field == "forecast_daily":
+                continue
                 for item in value:
                     print(item.conditions, item.air_temp_high)
             elif field == "forecast_hourly":
+                continue
                 for item in value:
                     print(item.conditions, item.air_temperature)
             else:

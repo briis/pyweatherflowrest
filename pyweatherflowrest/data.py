@@ -134,6 +134,8 @@ class ForecastDescription:
     conditions: str | None = None
     icon: str | None = None
     air_temperature: float | None = None
+    temp_high_today: float | None = None
+    temp_low_today: float | None = None
     station_pressure: float | None = None
     sea_level_pressure: float | None = None
     pressure_trend: str | None = None
