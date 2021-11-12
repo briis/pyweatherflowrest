@@ -25,17 +25,17 @@ async def main() -> None:
     except BadRequest as err:
         _LOGGER.debug(err)
 
-    # data: StationDescription = weatherflow.station_data
-    # if data is not None:
-    #     for field in data.__dataclass_fields__:
-    #         value = getattr(data, field)
-    #         print(field,"-", value)
+    data: StationDescription = weatherflow.station_data
+    if data is not None:
+        for field in data.__dataclass_fields__:
+            value = getattr(data, field)
+            print(field,"-", value)
 
-    # data: ObservationDescription = await weatherflow.update_observations()
-    # if data is not None:
-    #     for field in data.__dataclass_fields__:
-    #         value = getattr(data, field)
-    #         print(field,"-", value)
+    data: ObservationDescription = await weatherflow.update_observations()
+    if data is not None:
+        for field in data.__dataclass_fields__:
+            value = getattr(data, field)
+            print(field,"-", value)
 
 
     data: ForecastDescription = await weatherflow.update_forecast()
