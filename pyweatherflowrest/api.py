@@ -15,7 +15,7 @@ from pyweatherflowrest.const import (
     WEATHERFLOW_STATIONS_BASE_URL,
 )
 from pyweatherflowrest.data import ObservationDescription, StationDescription
-from pyweatherflowrest.exceptions import  Invalid,  ApiError, WrongStationID
+from pyweatherflowrest.exceptions import  Invalid,  BadRequest, WrongStationID, NotAuthorized
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -74,7 +74,7 @@ class WeatherFlowApiClient:
             if data["status"]["status_code"] == 404:
                 raise WrongStationID(f"Station ID {self.station_id} does not exist") from None
             if data["status"]["status_code"] == 401:
-                raise ApiError(f"Token {self.api_token} is invalid") from None
+                raise NotAuthorized(f"Token {self.api_token} is invalid") from None
             if data["stations"] == []:
                 raise Invalid(f"The data returned from Station ID {self.station_id} is invalid") from None
 
@@ -210,4 +210,4 @@ class WeatherFlowApiClient:
                 return data
 
         except client_exceptions.ClientError as err:
-            raise ApiError(f"Error requesting data from WeatherFlow: {err}") from None
+            raise BadRequest(f"Error requesting data from WeatherFlow: {err}") from None

@@ -20,7 +20,3 @@ class NotAuthorized(ClientError):
 
 class WrongStationID(ClientError):
     """Station ID does not exist."""
-
-
-class ApiError(ClientError):
-    """Other error."""

@@ -4,7 +4,7 @@ import time
 
 from pyweatherflowrest.api import WeatherFlowApiClient
 from pyweatherflowrest.data import ObservationDescription, StationDescription
-from pyweatherflowrest.exceptions import WrongStationID, ApiError, Invalid
+from pyweatherflowrest.exceptions import WrongStationID, Invalid, NotAuthorized, BadRequest
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -18,9 +18,11 @@ async def main() -> None:
 
     except WrongStationID as err:
         _LOGGER.debug(err)
-    except ApiError as err:
-        _LOGGER.debug(err)
     except Invalid as err:
+        _LOGGER.debug(err)
+    except NotAuthorized as err:
+        _LOGGER.debug(err)
+    except BadRequest as err:
         _LOGGER.debug(err)
 
     data: StationDescription = weatherflow.station_data
