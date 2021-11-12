@@ -1,5 +1,7 @@
 """Dataclasses for pyweatherflowrest"""
-from dataclasses import dataclass
+from __future__ import annotations
+
+from dataclasses import dataclass, field
 
 @dataclass
 class ObservationDescription:
@@ -88,6 +90,40 @@ class StationDescription:
 
 
 @dataclass
+class ForecastDailyDescription:
+    """A class that describes Daily Forecast entities."""
+
+    timestamp: int | None = None
+    conditions: str | None = None
+    icon: str | None = None
+    sunrise: int | None = None
+    sunset: int | None = None
+    air_temp_high: float | None = None
+    air_temp_low: float | None = None
+    precip_probability: int | None = None
+    precip_icon: str | None = None
+    precip_type: str | None = None
+
+@dataclass
+class ForecastHourlyDescription:
+    """A class that describes Hourly Forecast entities."""
+
+    timestamp: int | None = None
+    conditions: str | None = None
+    icon: str | None = None
+    air_temperature: float | None = None
+    sea_level_pressure: float | None = None
+    relative_humidity: int | None = None
+    precip: float | None = None
+    precip_probability: int | None = None
+    wind_avg: float | None = None
+    wind_direction: int | None = None
+    wind_direction_cardinal: str | None = None
+    wind_gust: float | None = None
+    uv: float | None = None
+    feels_like: float | None = None
+
+@dataclass
 class ForecastDescription:
     """A class that describes Forecast entities."""
 
@@ -114,7 +150,7 @@ class ForecastDescription:
     wet_bulb_temperature:float | None = None
     delta_t: float | None = None
     air_density: float | None = None
-    lightning_strike_count_last_1hr:int | None = None
+    lightning_strike_count_last_1hr: int | None = None
     lightning_strike_count_last_3hr: int | None = None
     lightning_strike_last_distance: int | None = None
     lightning_strike_last_distance_msg: str | None = None
@@ -123,4 +159,5 @@ class ForecastDescription:
     precip_accum_local_yesterday: float | None = None
     precip_minutes_local_day: int | None = None
     precip_minutes_local_yesterday: int | None = None
-
+    forecast_daily: list[ForecastDailyDescription] = field(default_factory=list) 
+    forecast_hourly: list[ForecastHourlyDescription] = field(default_factory=list) 

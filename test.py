@@ -3,7 +3,7 @@ import logging
 import time
 
 from pyweatherflowrest.api import WeatherFlowApiClient
-from pyweatherflowrest.data import ObservationDescription, StationDescription, ForecastDescription
+from pyweatherflowrest.data import ObservationDescription, StationDescription, ForecastDescription, ForecastDailyDescription
 from pyweatherflowrest.exceptions import WrongStationID, Invalid, NotAuthorized, BadRequest
 
 _LOGGER = logging.getLogger(__name__)
@@ -42,7 +42,14 @@ async def main() -> None:
     if data is not None:
         for field in data.__dataclass_fields__:
             value = getattr(data, field)
-            print(field,"-", value)
+            if field == "forecast_daily":
+                for item in value:
+                    print(item.conditions, item.air_temp_high)
+            elif field == "forecast_hourly":
+                for item in value:
+                    print(item.conditions, item.air_temperature)
+            else:
+                print(field,"-", value)
 
     end = time.time()
 

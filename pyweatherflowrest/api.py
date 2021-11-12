@@ -18,7 +18,13 @@ from pyweatherflowrest.const import (
     WEATHERFLOW_OBSERVATION_BASE_URL,
     WEATHERFLOW_STATIONS_BASE_URL,
 )
-from pyweatherflowrest.data import ObservationDescription, StationDescription, ForecastDescription
+from pyweatherflowrest.data import (
+    ObservationDescription,
+    StationDescription,
+    ForecastDescription,
+    ForecastDailyDescription,
+    ForecastHourlyDescription,
+)
 from pyweatherflowrest.exceptions import  Invalid,  BadRequest, WrongStationID, NotAuthorized
 
 _LOGGER = logging.getLogger(__name__)
@@ -248,6 +254,42 @@ class WeatherFlowApiClient:
                 precip_minutes_local_yesterday=current["precip_minutes_local_yesterday"],
             )
 
+            forecast_daily = data["forecast"]["daily"]            
+            for item in forecast_daily:
+                day_item = ForecastDailyDescription(
+                    timestamp = item["day_start_local"],
+                    conditions = item["conditions"],
+                    icon=item["icon"],
+                    sunrise=item["sunrise"],
+                    sunset=item["sunset"],
+                    air_temp_high=item["air_temp_high"],
+                    air_temp_low=item["air_temp_low"],
+                    precip_probability=item["precip_probability"],
+                    precip_icon=item["precip_icon"],
+                    precip_type=item["precip_type"],
+                )
+                entity_data.forecast_daily.append(day_item)
+
+            forecast_hourly = data["forecast"]["hourly"]            
+            for item in forecast_hourly:
+                hour_item = ForecastHourlyDescription(
+                    timestamp = item["time"],
+                    conditions = item["conditions"],
+                    icon=item["icon"],
+                    air_temperature=item["air_temperature"],
+                    sea_level_pressure=item["sea_level_pressure"],
+                    relative_humidity=item["relative_humidity"],
+                    precip=item["precip"],
+                    precip_probability=item["precip_probability"],
+                    wind_avg=item["wind_avg"],
+                    wind_direction=item["wind_direction"],
+                    wind_direction_cardinal=item["wind_direction_cardinal"],
+                    wind_gust=item["wind_gust"],
+                    uv=item["uv"],
+                    feels_like=item["feels_like"],
+                )
+                entity_data.forecast_hourly.append(hour_item)
+            
             return entity_data
 
         return None
