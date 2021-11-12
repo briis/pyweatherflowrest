@@ -12,7 +12,7 @@ from pyweatherflowrest.const import (
     WEATHERFLOW_FORECAST_BASE_URL,
     WEATHERFLOW_OBSERVATION_BASE_URL,
 )
-from pyweatherflowrest.data import ObservationDescription
+from pyweatherflowrest.data import ObservationDescription, StationDescription
 from pyweatherflowrest.exceptions import BadRequest, NotAuthorized, ApiError
 
 _LOGGER = logging.getLogger(__name__)
@@ -44,6 +44,35 @@ class WeatherFlowApiClient:
     def forecast_url(self) -> str:
         """Base Rest Url for forecast Data"""
         return f"{WEATHERFLOW_FORECAST_BASE_URL}{self.station_id}&token={self.api_token}"
+
+    async def read_station_data(self) -> None:
+        """Update observation data"""
+
+        data = await self.api_request(self.observation_url)
+        if data is not None:
+
+            units = data['station_units']
+            entity_data = StationDescription(
+                key=self.station_id,
+                station_name=data["station_name"],
+                public_name=data["public_name"],
+                latitude=data["latitude"],
+                longitude=data["longitude"],
+                timezone=data["timezone"],
+                elevation=data["elevation"],
+                units_temp=units["units_temp"],
+                units_wind=units["units_wind"],
+                units_precip=units["units_precip"],
+                units_pressure=units["units_pressure"],
+                units_distance=units["units_distance"],
+                units_direction=units["units_direction"],
+                units_other=units["units_other"],
+            )
+
+            return entity_data
+
+        return None
+
 
     async def update_observations(self) -> None:
         """Update observation data"""

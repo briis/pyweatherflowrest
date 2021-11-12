@@ -3,7 +3,7 @@ import logging
 import time
 
 from pyweatherflowrest.api import WeatherFlowApiClient
-from pyweatherflowrest.data import ObservationDescription
+from pyweatherflowrest.data import ObservationDescription, StationDescription
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -13,11 +13,15 @@ async def main() -> None:
 
     weatherflow = WeatherFlowApiClient(51146, "20c70eae-e62f-4d3b-b3a4-8586e90f3ac8")
 
-    data: ObservationDescription = await weatherflow.update_observations()
+    data: StationDescription = await weatherflow.read_station_data()
     for field in data.__dataclass_fields__:
         value = getattr(data, field)
-        print(field, value)
-    # print(data.air_temperature)
+        print(field,"-", value)
+
+    # data: ObservationDescription = await weatherflow.update_observations()
+    # for field in data.__dataclass_fields__:
+    #     value = getattr(data, field)
+    #     print(field,"-", value)
 
     end = time.time()
 

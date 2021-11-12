@@ -6,7 +6,7 @@ class ObservationDescription:
     """A class that describes Obervation entities."""
 
     """This is the Key identifier for this entity"""
-    key: str
+    key: int
 
     timestamp: int | None = None
     air_temperature: float | None = None
@@ -40,4 +40,25 @@ class ObservationDescription:
     delta_t: float | None = None
     air_density: float | None = None
     pressure_trend: str | None = None
+
+@dataclass
+class StationDescription:
+    """A class that describes Station entities."""
+
+    """This is the Key identifier for this entity"""
+    key: int
+
+    station_name: str | None = None
+    public_name: str | None = None
+    latitude: float | None = None
+    longitude: float | None = None
+    timezone: str | None = None
+    elevation: int | None = None
+    units_temp: str | None = None
+    units_wind: str | None = None
+    units_precip: str | None = None
+    units_pressure: str | None = None
+    units_distance: str | None = None
+    units_direction: str | None = None
+    units_other: str | None = None
     
