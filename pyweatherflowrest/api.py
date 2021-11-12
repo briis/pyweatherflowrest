@@ -9,12 +9,16 @@ import logging
 from typing import Optional
 
 from pyweatherflowrest.const import (
+    DEVICE_TYPE_AIR,
+    DEVICE_TYPE_HUB,
+    DEVICE_TYPE_SKY,
+    DEVICE_TYPE_TEMPEST,
     WEATHERFLOW_DEVICE_BASE_URL,
     WEATHERFLOW_FORECAST_BASE_URL,
     WEATHERFLOW_OBSERVATION_BASE_URL,
     WEATHERFLOW_STATIONS_BASE_URL,
 )
-from pyweatherflowrest.data import ObservationDescription, StationDescription
+from pyweatherflowrest.data import ObservationDescription, StationDescription, ForecastDescription
 from pyweatherflowrest.exceptions import  Invalid,  BadRequest, WrongStationID, NotAuthorized
 
 _LOGGER = logging.getLogger(__name__)
@@ -91,22 +95,26 @@ class WeatherFlowApiClient:
             for device in station["devices"]:
                 if device["device_type"] == "HB":
                     entity_data.hub_device_id = device["device_id"]
+                    entity_data.hub_device_type=DEVICE_TYPE_HUB
                     entity_data.hub_hardware_revision = device["hardware_revision"]
                     entity_data.hub_firmware_revision = device["firmware_revision"]
                     entity_data.hub_serial_number = device["serial_number"]
                 if device["device_type"] == "ST":
                     entity_data.tempest_device_id = device["device_id"]
+                    entity_data.tempest_device_type=DEVICE_TYPE_TEMPEST
                     entity_data.tempest_hardware_revision = device["hardware_revision"]
                     entity_data.tempest_firmware_revision = device["firmware_revision"]
                     entity_data.tempest_serial_number = device["serial_number"]
                     entity_data.is_tempest = True
                 if device["device_type"] == "AR":
                     entity_data.air_device_id = device["device_id"]
+                    entity_data.air_device_type=DEVICE_TYPE_AIR
                     entity_data.air_hardware_revision = device["hardware_revision"]
                     entity_data.air_firmware_revision = device["firmware_revision"]
                     entity_data.air_serial_number = device["serial_number"]
                 if device["device_type"] == "SK":
                     entity_data.sky_device_id = device["device_id"]
+                    entity_data.sky_device_type=DEVICE_TYPE_SKY
                     entity_data.sky_hardware_revision = device["hardware_revision"]
                     entity_data.sky_firmware_revision = device["firmware_revision"]
                     entity_data.sky_serial_number = device["serial_number"]
@@ -193,6 +201,52 @@ class WeatherFlowApiClient:
             )
             self._observation_data = entity_data
             await self._read_device_data()
+
+            return entity_data
+
+        return None
+
+
+    async def update_forecast(self) -> None:
+        """Update forecast data."""
+        if self._station_data is None:
+            return
+
+        data = await self._api_request(self.forecast_url)
+        if data is not None:
+            current = data['current_conditions']
+            entity_data = ForecastDescription(
+                key=self.station_id,
+                timestamp=current["time"],
+                conditions=current["conditions"],
+                icon=current["icon"],
+                air_temperature=current["air_temperature"],
+                station_pressure=current["station_pressure"],
+                sea_level_pressure=current["sea_level_pressure"],
+                pressure_trend=current["pressure_trend"],
+                relative_humidity=current["relative_humidity"],
+                wind_avg=current["wind_avg"],
+                wind_direction=current["wind_direction"],
+                wind_direction_cardinal=current["wind_direction_cardinal"],
+                wind_gust=current["wind_gust"],
+                solar_radiation=current["solar_radiation"],
+                uv=current["uv"],
+                brightness=current["brightness"],
+                feels_like=current["feels_like"],
+                dew_point=current["dew_point"],
+                wet_bulb_temperature=current["wet_bulb_temperature"],
+                delta_t=current["delta_t"],
+                air_density=current["air_density"],
+                lightning_strike_count_last_1hr=current["lightning_strike_count_last_1hr"],
+                lightning_strike_count_last_3hr=current["lightning_strike_count_last_3hr"],
+                lightning_strike_last_distance=current["lightning_strike_last_distance"],
+                lightning_strike_last_distance_msg=current["lightning_strike_last_distance_msg"],
+                lightning_strike_last_epoch=current["lightning_strike_last_epoch"],
+                precip_accum_local_day=current["precip_accum_local_day"],
+                precip_accum_local_yesterday=current["precip_accum_local_yesterday"],
+                precip_minutes_local_day=current["precip_minutes_local_day"],
+                precip_minutes_local_yesterday=current["precip_minutes_local_yesterday"],
+            )
 
             return entity_data
 

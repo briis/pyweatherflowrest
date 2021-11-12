@@ -66,19 +66,61 @@ class StationDescription:
     elevation: int | None = None
     is_tempest: bool | None = False
     hub_device_id: int | None = None
+    hub_device_type: str | None = None
     hub_hardware_revision: int | None = None
     hub_firmware_revision: int | None = None
     hub_serial_number: int | None = None
     tempest_device_id: int | None = None
+    tempest_device_type: str | None = None
     tempest_hardware_revision: int | None = None
     tempest_firmware_revision: int | None = None
     tempest_serial_number: int | None = None
     air_device_id: int | None = None
+    air_device_type: str | None = None
     air_hardware_revision: int | None = None
     air_firmware_revision: int | None = None
     air_serial_number: int | None = None
     sky_device_id: int | None = None
+    sky_device_type: str | None = None
     sky_hardware_revision: int | None = None
     sky_firmware_revision: int | None = None
     sky_serial_number: int | None = None
-    
+
+
+@dataclass
+class ForecastDescription:
+    """A class that describes Forecast entities."""
+
+    """This is the Key identifier for this entity"""
+    key: int
+
+    timestamp: int | None = None
+    conditions: str | None = None
+    icon: str | None = None
+    air_temperature: float | None = None
+    station_pressure: float | None = None
+    sea_level_pressure: float | None = None
+    pressure_trend: str | None = None
+    relative_humidity: int | None = None
+    wind_avg: float | None = None
+    wind_direction: int | None = None
+    wind_direction_cardinal: str | None = None
+    wind_gust: float | None = None
+    solar_radiation: float | None = None
+    uv: float | None = None
+    brightness: int | None = None
+    feels_like: float | None = None
+    dew_point: float | None = None
+    wet_bulb_temperature:float | None = None
+    delta_t: float | None = None
+    air_density: float | None = None
+    lightning_strike_count_last_1hr:int | None = None
+    lightning_strike_count_last_3hr: int | None = None
+    lightning_strike_last_distance: int | None = None
+    lightning_strike_last_distance_msg: str | None = None
+    lightning_strike_last_epoch: int | None = None
+    precip_accum_local_day: float | None = None
+    precip_accum_local_yesterday: float | None = None
+    precip_minutes_local_day: int | None = None
+    precip_minutes_local_yesterday: int | None = None
+
