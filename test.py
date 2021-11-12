@@ -11,7 +11,7 @@ async def main() -> None:
     logging.basicConfig(level=logging.DEBUG)
     start = time.time()
 
-    weatherflow = WeatherFlowApiClient(51146, "4e168eb2-b84f-4014-bc1b-b4317976f283")
+    weatherflow = WeatherFlowApiClient(51146, "20c70eae-e62f-4d3b-b3a4-8586e90f3ac8")
 
     data: ObservationDescription = await weatherflow.update_observations()
     for field in data.__dataclass_fields__:
