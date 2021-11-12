@@ -1,8 +1,6 @@
 # Python Wrapper for WeatherFlow REST API
 
-[![Latest PyPI version](https://img.shields.io/pypi/v/pyweatherflowrest)] [![Supported Python](https://img.shields.io/pypi/pyversions/pyweatherflowrest
-)](https://pypi.org/project/pyweatherflowrest
-/)
+![Latest PyPI version](https://img.shields.io/pypi/v/pyweatherflowrest) ![Supported Python](https://img.shields.io/pypi/pyversions/pyweatherflowrest)
 
 This module communicates with a WeatherFlow Weather Station using a [their REST API](https://weatherflow.github.io/Tempest/api/swagger/#/).
 
