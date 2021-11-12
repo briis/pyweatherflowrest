@@ -24,6 +24,7 @@ from pyweatherflowrest.data import (
     ForecastHourlyDescription,
 )
 from pyweatherflowrest.exceptions import  Invalid,  BadRequest, WrongStationID, NotAuthorized
+from pyweatherflowrest.helpers import Conversions
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -43,6 +44,7 @@ class WeatherFlowApiClient:
         if session is None:
             session = aiohttp.ClientSession()
         self.req = session
+        self.cnv = Conversions()
 
         self._station_data: StationDescription = None
         self._observation_data: ObservationDescription = None
@@ -176,9 +178,12 @@ class WeatherFlowApiClient:
                 precip_minutes_local_day=obervations["precip_minutes_local_day"],
                 precip_minutes_local_yesterday=obervations["precip_minutes_local_yesterday"],
                 wind_avg=obervations["wind_avg"],
+                wind_avg_imperial= await self.cnv.wind_speed_imperial(obervations["wind_avg"]),
                 wind_direction=obervations["wind_direction"],
                 wind_gust=obervations["wind_gust"],
+                wind_gust_imperial= await self.cnv.wind_speed_imperial(obervations["wind_gust"]),
                 wind_lull=obervations["wind_lull"],
+                wind_lull_imperial= await self.cnv.wind_speed_imperial(obervations["wind_lull"]),
                 solar_radiation=obervations["solar_radiation"],
                 uv=obervations["uv"],
                 brightness=obervations["brightness"],

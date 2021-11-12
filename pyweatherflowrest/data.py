@@ -3,12 +3,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+   
 @dataclass
 class ObservationDescription:
     """A class that describes Obervation entities."""
 
     """This is the Key identifier for this entity"""
     key: int
+
 
     timestamp: int | None = None
     air_temperature: float | None = None
@@ -23,9 +25,12 @@ class ObservationDescription:
     precip_minutes_local_day: int | None = None
     precip_minutes_local_yesterday: int | None = None
     wind_avg: float | None = None
+    wind_avg_imperial: float | None = None
     wind_direction: int | None = None
     wind_gust: float | None = None
+    wind_gust_imperial: float | None = None
     wind_lull: float | None = None
+    wind_lull_imperial: float | None = None
     solar_radiation: float | None = None
     uv: float | None = None
     brightness: int | None = None
@@ -52,6 +57,7 @@ class ObservationDescription:
     units_distance: str | None = None
     units_direction: str | None = None
     units_other: str | None = None
+
 
 @dataclass
 class StationDescription:
