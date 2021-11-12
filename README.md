@@ -1,8 +1,6 @@
 # Python Wrapper for WeatherFlow REST API
 
-[![Latest PyPI version](https://img.shields.io/pypi/v/pyweatherflowrest
-)](https://pypi.org/project/pyweatherflowrest
-/) [![Supported Python](https://img.shields.io/pypi/pyversions/pyweatherflowrest
+[![Latest PyPI version](https://img.shields.io/pypi/v/pyweatherflowrest)] [![Supported Python](https://img.shields.io/pypi/pyversions/pyweatherflowrest
 )](https://pypi.org/project/pyweatherflowrest
 /)
 
@@ -27,14 +25,23 @@ This library is primarily designed to be used in an async context.
 The main interface for the library is the `pyweatherflowrest.WeatherFlowApiClient`:
 
 ```python
-from pyweatherflowrest import WeatherFlowApiClient
+import asyncio
+import logging
+import time
+
+from pyweatherflowrest.api import WeatherFlowApiClient
 from pyweatherflowrest.data import ObservationDescription, StationDescription, ForecastDescription, ForecastDailyDescription
 from pyweatherflowrest.exceptions import WrongStationID, Invalid, NotAuthorized, BadRequest
 
-weatherflow = WeatherFlowApiClient(station_id, token)
+_LOGGER = logging.getLogger(__name__)
 
-   try:
-        await weatherflow.initialize() # this will initalize the connection to weatherflow and load needed data for further queries.
+async def main() -> None:
+    logging.basicConfig(level=logging.DEBUG)
+    start = time.time()
+
+    weatherflow = WeatherFlowApiClient("YOUR STATION ID", "YOUR TOKEN")
+    try:
+        await weatherflow.initialize()
 
     except WrongStationID as err:
         _LOGGER.debug(err)
@@ -45,33 +52,38 @@ weatherflow = WeatherFlowApiClient(station_id, token)
     except BadRequest as err:
         _LOGGER.debug(err)
 
-# get station information
-data: StationDescription = weatherflow.station_data
-if data is not None:
-    for field in data.__dataclass_fields__:
-        value = getattr(data, field)
-        print(field,"-", value)
+    data: StationDescription = weatherflow.station_data
+    if data is not None:
+        for field in data.__dataclass_fields__:
+            value = getattr(data, field)
+            print(field,"-", value)
 
-# get forecast data
-data: ForecastDescription = await weatherflow.update_forecast()
-if data is not None:
-    for field in data.__dataclass_fields__:
-        value = getattr(data, field)
-        if field == "forecast_daily":
-            for item in value:
-                print(item.conditions, item.air_temp_high)
-        elif field == "forecast_hourly":
-            for item in value:
-                print(item.conditions, item.air_temperature)
-        else:
+    data: ObservationDescription = await weatherflow.update_observations()
+    if data is not None:
+        for field in data.__dataclass_fields__:
+            value = getattr(data, field)
             print(field,"-", value)
 
 
-# get current condition data
-data: ObservationDescription = await weatherflow.update_observations()
-if data is not None:
-    for field in data.__dataclass_fields__:
-        value = getattr(data, field)
-        print(field,"-", value)
+    data: ForecastDescription = await weatherflow.update_forecast()
+    if data is not None:
+        for field in data.__dataclass_fields__:
+            value = getattr(data, field)
+            if field == "forecast_daily":
+                for item in value:
+                    print(item.conditions, item.air_temp_high)
+            elif field == "forecast_hourly":
+                for item in value:
+                    print(item.conditions, item.air_temperature)
+            else:
+                print(field,"-", value)
+
+    end = time.time()
+
+    await weatherflow.req.close()
+
+    _LOGGER.info("Execution time: %s seconds", end - start)
+
+asyncio.run(main())
 
 ```
