@@ -1,10 +1,8 @@
 """WeatherFlow Data Wrapper."""
 from __future__ import annotations
 
-import asyncio
 import aiohttp
 from aiohttp import client_exceptions
-import json as pjson
 import logging
 from typing import Optional
 
