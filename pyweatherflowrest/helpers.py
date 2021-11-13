@@ -8,3 +8,9 @@ class Conversions:
         if value is None:
             return None
         return round(value * 2.236936292, 1)
+
+    async def pressure_imperial(self, value) -> float:
+        """Returns inHg from mb/hPa"""
+        if value is None:
+            return None
+        return round(value * 0.029530, 1)
