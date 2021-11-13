@@ -31,27 +31,27 @@ async def main() -> None:
     #         value = getattr(data, field)
     #         print(field,"-", value)
 
-    data: ObservationDescription = await weatherflow.update_observations()
-    if data is not None:
-        for field in data.__dataclass_fields__:
-            value = getattr(data, field)
-            print(field,"-", value)
-
-
-    # data: ForecastDescription = await weatherflow.update_forecast()
+    # data: ObservationDescription = await weatherflow.update_observations()
     # if data is not None:
     #     for field in data.__dataclass_fields__:
     #         value = getattr(data, field)
-    #         if field == "forecast_daily":
-    #             continue
-    #             for item in value:
-    #                 print(item.conditions, item.air_temp_high)
-    #         elif field == "forecast_hourly":
-    #             continue
-    #             for item in value:
-    #                 print(item.conditions, item.air_temperature)
-    #         else:
-    #             print(field,"-", value)
+    #         print(field,"-", value)
+
+
+    data: ForecastDescription = await weatherflow.update_forecast()
+    if data is not None:
+        for field in data.__dataclass_fields__:
+            value = getattr(data, field)
+            if field == "forecast_daily":
+                continue
+                for item in value:
+                    print(item.conditions, item.air_temp_high)
+            elif field == "forecast_hourly":
+                continue
+                for item in value:
+                    print(item.conditions, item.air_temperature)
+            else:
+                print(field,"-", value)
 
     end = time.time()
 

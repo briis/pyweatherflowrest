@@ -194,7 +194,7 @@ class WeatherFlowApiClient:
                 solar_radiation=obervations["solar_radiation"],
                 uv=obervations["uv"],
                 brightness=obervations["brightness"],
-                lightning_strike_last_epoch=obervations["lightning_strike_last_epoch"],
+                lightning_strike_last_epoch=self.cnv.utc_from_timestamp(obervations["lightning_strike_last_epoch"]),
                 lightning_strike_last_distance=obervations["lightning_strike_last_distance"],
                 lightning_strike_count=obervations["lightning_strike_count"],
                 lightning_strike_count_last_1hr=obervations["lightning_strike_count_last_1hr"],
@@ -233,7 +233,7 @@ class WeatherFlowApiClient:
             current = data['current_conditions']
             entity_data = ForecastDescription(
                 key=self.station_id,
-                utc_time=current["time"],
+                utc_time=await self.cnv.utc_from_timestamp(current["time"]),
                 conditions=current["conditions"],
                 icon=current["icon"],
                 air_temperature=await self.cnv.temperature(current["air_temperature"]),
@@ -257,7 +257,7 @@ class WeatherFlowApiClient:
                 lightning_strike_count_last_3hr=current["lightning_strike_count_last_3hr"],
                 lightning_strike_last_distance=current["lightning_strike_last_distance"],
                 lightning_strike_last_distance_msg=current["lightning_strike_last_distance_msg"],
-                lightning_strike_last_epoch=current["lightning_strike_last_epoch"],
+                lightning_strike_last_epoch=await self.cnv.utc_from_timestamp(current["lightning_strike_last_epoch"]),
                 precip_accum_local_day=await self.cnv.rain(current["precip_accum_local_day"]),
                 precip_accum_local_yesterday=await self.cnv.rain(current["precip_accum_local_yesterday"]),
                 precip_minutes_local_day=current["precip_minutes_local_day"],
@@ -271,7 +271,7 @@ class WeatherFlowApiClient:
 
             for item in forecast_daily:
                 day_item = ForecastDailyDescription(
-                    utc_time = item["day_start_local"],
+                    utc_time = await self.cnv.utc_from_timestamp(item["day_start_local"]),
                     conditions = item["conditions"],
                     icon=item["icon"],
                     sunrise=item["sunrise"],
@@ -287,7 +287,7 @@ class WeatherFlowApiClient:
             forecast_hourly = data["forecast"]["hourly"]            
             for item in forecast_hourly:
                 hour_item = ForecastHourlyDescription(
-                    utc_time = item["time"],
+                    utc_time = await self.cnv.utc_from_timestamp(item["time"]),
                     conditions = item["conditions"],
                     icon=item["icon"],
                     air_temperature=await self.cnv.temperature(item["air_temperature"]),
