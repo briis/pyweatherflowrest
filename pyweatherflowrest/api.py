@@ -306,6 +306,7 @@ class WeatherFlowApiClient:
 
     async def load_unit_system(self) -> None:
         """Returns unit of meassurement based on unit system"""
+        distance_unit = "km" if self._is_metric else "mi"
         length_unit = "m/s" if self._is_metric else "mi/h"
         length_km_unit = "km/h" if self._is_metric else "mi/h"
         pressure_unit = "hPa" if self._is_metric else "inHg"
@@ -313,11 +314,12 @@ class WeatherFlowApiClient:
 
         units_list = {
             "none": None,
+            "distance": distance_unit,
             "length": length_unit,
             "length_km": length_km_unit,
             "pressure": pressure_unit,
             "precipitation": precip_unit,
-            "precipitation_rate": f"{precip_unit}/h"
+            "precipitation_rate": f"{precip_unit}/h",
         }
 
         return units_list
