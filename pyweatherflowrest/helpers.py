@@ -44,6 +44,16 @@ class Conversions:
 
         return await self.rain(_rain_rate)
 
+    async def distance(self, value) -> float:
+        """Conerts km to mi."""
+        if value is None:
+            return None
+
+        if self.units == UNIT_TYPE_METRIC:
+            return round(value,1)
+
+        return round(value * 0.6213688756, 1)
+        
     async def windspeed(self, value, wind_unit_kmh: bool = False) -> float:
         """Returns miles per hour from m/s."""
         if value is None:
