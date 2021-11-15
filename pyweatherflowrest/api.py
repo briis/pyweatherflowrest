@@ -248,7 +248,7 @@ class WeatherFlowApiClient:
                 dew_point=await self.cnv.temperature(current["dew_point"]),
                 wet_bulb_temperature=await self.cnv.temperature(current["wet_bulb_temperature"]),
                 delta_t=current["delta_t"],
-                air_density=current["air_density"],
+                air_density=await self.cnv.density(current["air_density"]),
                 lightning_strike_count_last_1hr=current["lightning_strike_count_last_1hr"],
                 lightning_strike_count_last_3hr=current["lightning_strike_count_last_3hr"],
                 lightning_strike_last_distance=current["lightning_strike_last_distance"],
@@ -306,6 +306,7 @@ class WeatherFlowApiClient:
 
     async def load_unit_system(self) -> None:
         """Returns unit of meassurement based on unit system"""
+        density_unit = "kg/m^3" if self._is_metric else "lb/ft^3"
         distance_unit = "km" if self._is_metric else "mi"
         length_unit = "m/s" if self._is_metric else "mi/h"
         length_km_unit = "km/h" if self._is_metric else "mi/h"
@@ -314,6 +315,7 @@ class WeatherFlowApiClient:
 
         units_list = {
             "none": None,
+            "density": density_unit,
             "distance": distance_unit,
             "length": length_unit,
             "length_km": length_km_unit,

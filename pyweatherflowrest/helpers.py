@@ -44,6 +44,16 @@ class Conversions:
 
         return await self.rain(_rain_rate)
 
+    async def density(self, value) -> float:
+        """Converts air density."""
+        if value is None:
+            return None
+
+        if self.units == UNIT_TYPE_METRIC:
+            return round(value,1)
+
+        return round(value * 0.06243, 1)
+
     async def distance(self, value) -> float:
         """Conerts km to mi."""
         if value is None:
