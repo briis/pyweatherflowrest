@@ -279,7 +279,7 @@ class WeatherFlowApiClient:
                     precip_probability=item["precip_probability"],
                     precip_icon=item["precip_icon"],
                     precip_type=item["precip_type"],
-                    wind_avg=await self.cnv.windspeed(calc_values["wind_avg"]),
+                    wind_avg=await self.cnv.windspeed(calc_values["wind_avg"], self.homeassistant),
                     wind_direction=calc_values["wind_direction"],
                 )
                 entity_data.forecast_daily.append(day_item)
