@@ -266,6 +266,7 @@ class WeatherFlowApiClient:
             entity_data.temp_low_today = forecast_daily[0]["air_temp_low"]          
 
             for item in forecast_daily:
+                calc_values = await self.calc.day_forecast_extras(item, data["forecast"]["hourly"])
                 day_item = ForecastDailyDescription(
                     utc_time = await self.cnv.utc_from_timestamp(item["day_start_local"]),
                     conditions = item["conditions"],
@@ -274,9 +275,12 @@ class WeatherFlowApiClient:
                     sunset=item["sunset"],
                     air_temp_high=await self.cnv.temperature(item["air_temp_high"]),
                     air_temp_low=await self.cnv.temperature(item["air_temp_low"]),
+                    precip=await self.cnv.rain(calc_values["precip"]),
                     precip_probability=item["precip_probability"],
                     precip_icon=item["precip_icon"],
                     precip_type=item["precip_type"],
+                    wind_avg=await self.cnv.windspeed(calc_values["wind_avg"]),
+                    wind_direction=calc_values["wind_direction"],
                 )
                 entity_data.forecast_daily.append(day_item)
 

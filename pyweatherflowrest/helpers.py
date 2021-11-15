@@ -50,7 +50,7 @@ class Conversions:
             return None
 
         if self.units == UNIT_TYPE_METRIC:
-            return round(value,1)
+            return round(value, 1)
 
         return round(value * 0.06243, 1)
 
@@ -97,3 +97,20 @@ class Calculations:
             return None
             
         return temperature < 0
+
+    async def day_forecast_extras(self, day_data, hour_data) -> float:
+        """Returns accumulated precip for the day."""
+        _precip = 0
+        _wind_avg =[]
+        _wind_bearing=[]
+
+        for item in hour_data:
+            if item["local_day"] == day_data["day_num"]:
+                _precip += item["precip"]
+                _wind_avg.append(item["wind_avg"])
+                _wind_bearing.append(item["wind_direction"])
+        
+        _sum_wind_avg = sum(_wind_avg) / len(_wind_avg)
+        _sum_wind_bearing = sum(_wind_bearing) / len(_wind_bearing)
+
+        return {"precip": round(_precip, 1), "wind_avg": round(_sum_wind_avg, 1), "wind_direction": int(_sum_wind_bearing)}

@@ -100,9 +100,12 @@ class ForecastDailyDescription:
     sunset: int | None = None
     air_temp_high: float | None = None
     air_temp_low: float | None = None
+    precip: float | None = None
     precip_probability: int | None = None
     precip_icon: str | None = None
     precip_type: str | None = None
+    wind_avg: float | None = None
+    wind_direction: int | None = None
 
 @dataclass
 class ForecastHourlyDescription:
