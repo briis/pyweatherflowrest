@@ -49,13 +49,8 @@ class ObservationDescription:
     voltage_air: float | None = None
     voltage_sky: float | None = None
     voltage_tempest: float | None = None
-    units_temp: str | None = None
-    units_wind: str | None = None
-    units_precip: str | None = None
-    units_pressure: str | None = None
-    units_distance: str | None = None
-    units_direction: str | None = None
-    units_other: str | None = None
+    is_freezing: bool | None = None
+    is_raining: bool | None = None
 
 
 @dataclass

@@ -15,19 +15,19 @@ class Conversions:
         self.homeassistant = homeassistant
 
     async def temperature(self, value) -> float:
-        """Returns celcius to Fahrenheit"""
+        """Returns celcius to Fahrenheit."""
         if value is None or self.units == UNIT_TYPE_METRIC or self.homeassistant:
             return value
         return round(value * 1.8 + 32, 1)
 
     async def pressure(self, value) -> float:
-        """Returns inHg from mb/hPa"""
+        """Returns inHg from mb/hPa."""
         if value is None or self.units == UNIT_TYPE_METRIC:
             return value
         return round(value * 0.029530, 1)
 
     async def rain(self, value) -> float:
-        """Converts rain units"""
+        """Converts rain units."""
         if value is None:
             return None
 
@@ -36,7 +36,7 @@ class Conversions:
         return round(value * 0.03937007874, 2)
 
     async def rain_rate(self, value) -> float:
-        """Calculates Rain Rate"""
+        """Calculates Rain Rate."""
         if value is None:
             return None
 
@@ -45,7 +45,7 @@ class Conversions:
         return await self.rain(_rain_rate)
 
     async def windspeed(self, value, wind_unit_kmh: bool = False) -> float:
-        """Returns miles per hour from m/s"""
+        """Returns miles per hour from m/s."""
         if value is None:
             return value
         
@@ -60,3 +60,20 @@ class Conversions:
         """Return a UTC time from a timestamp."""
         return UTC.localize(datetime.datetime.utcfromtimestamp(timestamp))
 
+class Calculations:
+    """Calculate entity values."""
+
+    async def is_raining(self, rain):
+        """Returns true if it is raining."""
+        if rain is None:
+            return None
+            
+        rain_rate = rain * 60
+        return rain_rate > 0
+
+    async def is_freezing(self, temperature):
+        """Returns true if temperature below 0."""
+        if temperature is None:
+            return None
+            
+        return temperature < 0

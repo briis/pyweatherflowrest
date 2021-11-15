@@ -26,7 +26,7 @@ from pyweatherflowrest.data import (
     ForecastHourlyDescription,
 )
 from pyweatherflowrest.exceptions import  Invalid,  BadRequest, WrongStationID, NotAuthorized
-from pyweatherflowrest.helpers import Conversions
+from pyweatherflowrest.helpers import Conversions, Calculations
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -54,10 +54,12 @@ class WeatherFlowApiClient:
             session = aiohttp.ClientSession()
         self.req = session
         self.cnv = Conversions(self.units, self.homeassistant)
+        self.calc = Calculations()
 
         self._station_data: StationDescription = None
         self._observation_data: ObservationDescription = None
         self._device_id = None
+        self._is_metric = self.units is UNIT_TYPE_METRIC
 
     @property
     def station_data(self) -> StationDescription:
@@ -171,7 +173,6 @@ class WeatherFlowApiClient:
         data = await self._api_request(self.observation_url)
         if data is not None:
             obervations = data['obs'][0]
-            units = data['station_units']
             entity_data = ObservationDescription(
                 key=self.station_id,
                 utc_time=await self.cnv.utc_from_timestamp(obervations["timestamp"]),
@@ -207,13 +208,8 @@ class WeatherFlowApiClient:
                 delta_t=obervations["delta_t"],
                 air_density=obervations["air_density"],
                 pressure_trend=obervations["pressure_trend"],
-                units_temp=units["units_temp"],
-                units_wind=units["units_wind"],
-                units_precip=units["units_precip"],
-                units_pressure=units["units_pressure"],
-                units_distance=units["units_distance"],
-                units_direction=units["units_direction"],
-                units_other=units["units_other"],
+                is_raining=await self.calc.is_raining(obervations["precip"]),
+                is_freezing=await self.calc.is_freezing(obervations["air_temperature"])
             )
             self._observation_data = entity_data
             await self._read_device_data()
@@ -307,6 +303,24 @@ class WeatherFlowApiClient:
             return entity_data
 
         return None
+
+    async def load_unit_system(self) -> None:
+        """Returns unit of meassurement based on unit system"""
+        length_unit = "m/s" if self._is_metric else "mi/h"
+        length_km_unit = "km/h" if self._is_metric else "mi/h"
+        pressure_unit = "hPa" if self._is_metric else "inHg"
+        precip_unit = "mm" if self._is_metric else "in"
+
+        units_list = {
+            "none": None,
+            "length": length_unit,
+            "length_km": length_km_unit,
+            "pressure": pressure_unit,
+            "precipitation": precip_unit,
+            "precipitation_rate": f"{precip_unit}/h"
+        }
+
+        return units_list
 
     async def _api_request(
         self,
