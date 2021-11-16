@@ -149,6 +149,7 @@ class WeatherFlowApiClient:
             if data is not None:
                 device = data["obs"][0]
                 self._observation_data.voltage_tempest = device[voltage_index]
+                self._observation_data.battery_tempest = await self.calc.battery_percent(self._station_data.is_tempest, device[voltage_index])
         else:
             self._device_id = self._station_data.air_device_id
             voltage_index = 6
@@ -156,6 +157,7 @@ class WeatherFlowApiClient:
             if data is not None:
                 device = data["obs"][0]
                 self._observation_data.voltage_air = device[voltage_index]
+                self._observation_data.battery_air = await self.calc.battery_percent(self._station_data.is_tempest, device[voltage_index])
 
             self._device_id = self._station_data.sky_device_id
             voltage_index = 8
@@ -163,7 +165,7 @@ class WeatherFlowApiClient:
             if data is not None:
                 device = data["obs"][0]
                 self._observation_data.voltage_sky = device[voltage_index]
-
+                self._observation_data.battery_sky = await self.calc.battery_percent(self._station_data.is_tempest, device[voltage_index])
 
     async def update_observations(self) -> None:
         """Update observation data."""
@@ -173,6 +175,12 @@ class WeatherFlowApiClient:
         data = await self._api_request(self.observation_url)
         if data is not None:
             obervations = data['obs'][0]
+            visibility = await self.calc.visibility(
+                self._station_data.elevation,
+                obervations["air_temperature"],
+                obervations["relative_humidity"],
+                obervations["dew_point"]
+            )
             entity_data = ObservationDescription(
                 key=self.station_id,
                 utc_time=await self.cnv.utc_from_timestamp(obervations["timestamp"]),
@@ -209,7 +217,10 @@ class WeatherFlowApiClient:
                 air_density=obervations["air_density"],
                 pressure_trend=obervations["pressure_trend"],
                 is_raining=await self.calc.is_raining(obervations["precip"]),
-                is_freezing=await self.calc.is_freezing(obervations["air_temperature"])
+                is_freezing=await self.calc.is_freezing(obervations["air_temperature"]),
+                visibility=await self.cnv.distance(visibility),
+                absolute_humidity=await self.calc.absolute_humidity(obervations["air_temperature"], obervations["relative_humidity"]),
+                beaufort=await self.calc.beaufort(obervations["wind_avg"]),
             )
             self._observation_data = entity_data
             await self._read_device_data()

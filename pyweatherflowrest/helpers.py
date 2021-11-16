@@ -2,11 +2,15 @@
 from __future__ import annotations
 
 import datetime
+import logging
+import math
 import pytz
 
 from pyweatherflowrest.const import UNIT_TYPE_METRIC
 
 UTC = pytz.utc
+
+_LOGGER = logging.getLogger(__name__)
 
 class Conversions:
     """Converts values from metric."""
@@ -114,3 +118,96 @@ class Calculations:
         _sum_wind_bearing = sum(_wind_bearing) / len(_wind_bearing)
 
         return {"precip": round(_precip, 1), "wind_avg": round(_sum_wind_avg, 1), "wind_direction": int(_sum_wind_bearing)}
+
+    async def visibility(self, elevation, air_temperature, relative_humidity, dewpoint) -> float:
+        """Returns the calculated visibility."""
+
+        if elevation is None or air_temperature is None or relative_humidity is None or dewpoint is None:
+            return None
+
+        elevation_min = float(2)
+        if elevation > 2:
+            elevation_min = float(elevation)
+
+        max_visibility = float(3.56972 * math.sqrt(elevation_min))
+        percent_reduction_a = float((1.13 * abs(air_temperature - dewpoint) - 1.15) /10)
+        if percent_reduction_a > 1:
+            percent_reduction = float(1)
+        elif percent_reduction_a < 0.025:
+            percent_reduction = float(0.025)
+        else:
+            percent_reduction = percent_reduction_a
+        
+        visibility_km = float(max_visibility * percent_reduction)
+
+        return visibility_km
+
+    async def absolute_humidity(self, air_temperature, relative_humidity) -> float:
+        """Returns calculated absolute humidity."""
+
+        if air_temperature is None or relative_humidity is None:
+            return None
+
+        temperature_kelvin = air_temperature + 273.16
+        humidity = relative_humidity / 100
+        abs_humidity = (1320.65 / temperature_kelvin) * humidity * (10 ** ((7.4475 * (temperature_kelvin - 273.14)) / (temperature_kelvin - 39.44)))
+
+        return round(abs_humidity, 2)
+
+    async def battery_percent(self, is_tempest: bool, voltage: float) -> int:
+        """Returns battery percentage from voltage."""
+
+        if is_tempest is None or voltage is None:
+            return None
+
+        if is_tempest:
+            if voltage > 2.80:
+                bat_percent = 100
+            elif voltage < 1.8:
+                bat_percent = 0
+            else:
+                bat_percent = (voltage - 1.8) * 100
+        else:
+            if voltage > 3.50:
+                bat_percent = 100
+            elif voltage < 2.4:
+                bat_percent = 0
+            else:
+                bat_percent = ((voltage - 2.4) / 1.1) * 100
+
+        return int(bat_percent)
+
+    async def beaufort(self, wind_speed: float) -> int:
+        """Returns Beaufort scale value from wind speed."""
+
+        if wind_speed is None:
+            return None
+
+        if wind_speed > 32.7:
+            bft_value = 12
+        elif wind_speed >= 28.5:
+            bft_value = 11
+        elif wind_speed >= 24.5:
+            bft_value = 10
+        elif wind_speed >= 20.8:
+            bft_value = 9
+        elif wind_speed >= 17.2:
+            bft_value = 8
+        elif wind_speed >= 13.9:
+            bft_value = 7
+        elif wind_speed >= 10.8:
+            bft_value = 6
+        elif wind_speed >= 8.0:
+            bft_value = 5
+        elif wind_speed >= 5.5:
+            bft_value = 4
+        elif wind_speed >= 3.4:
+            bft_value = 3
+        elif wind_speed >= 1.6:
+            bft_value = 2
+        elif wind_speed >= 0.3:
+            bft_value = 1
+        else:
+            bft_value = 0
+
+        return bft_value
