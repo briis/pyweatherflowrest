@@ -19,6 +19,7 @@ class ObservationDescription:
     station_pressure: float | None = None
     sea_level_pressure: float | None = None
     relative_humidity: int | None = None
+    absolute_humidity: int | None = None
     precip: float | None = None
     precip_rate: float | None = None
     precip_accum_last_1hr: float | None = None
@@ -30,6 +31,7 @@ class ObservationDescription:
     wind_direction: int | None = None
     wind_gust: float | None = None
     wind_lull: float | None = None
+    beaufort: float | None = None
     solar_radiation: float | None = None
     uv: float | None = None
     brightness: int | None = None
@@ -45,10 +47,14 @@ class ObservationDescription:
     wet_bulb_temperature: float | None = None
     delta_t: float | None = None
     air_density: float | None = None
+    visibility: float | None = None
     pressure_trend: str | None = None
     voltage_air: float | None = None
+    battery_air: float | None = None
     voltage_sky: float | None = None
+    battery_sky: float | None = None
     voltage_tempest: float | None = None
+    battery_tempest: float | None = None
     is_freezing: bool | None = None
     is_raining: bool | None = None
 
