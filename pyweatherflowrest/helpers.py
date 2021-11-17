@@ -4,20 +4,18 @@ from __future__ import annotations
 import datetime
 import logging
 import math
-import pytz
 from dateutil import tz
 
 from pyweatherflowrest.const import UNIT_TYPE_METRIC
-
-UTC = pytz.utc
 
 _LOGGER = logging.getLogger(__name__)
 
 class Conversions:
     """Converts values from metric."""
-    def __init__(self, units: str, homeassistant: bool) -> None:
+    def __init__(self, units: str, homeassistant: bool, timezone: str) -> None:
         self.units = units
         self.homeassistant = homeassistant
+        self.timezone = timezone
 
     def temperature(self, value) -> float:
         """Returns celcius to Fahrenheit."""
@@ -83,10 +81,8 @@ class Conversions:
 
     def utc_from_timestamp(self, timestamp: int) -> datetime.datetime:
         """Return a UTC time from a timestamp."""
-        utc_zone = tz.gettz('Europe/Copenhagen')
+        utc_zone = tz.gettz(self.timezone)
         return datetime.datetime.utcfromtimestamp(timestamp).astimezone(utc_zone)
-        # return UTC.localize(datetime.datetime.utcfromtimestamp(timestamp))
-        # return datetime.datetime.utcfromtimestamp(timestamp).isoformat()
 
 class Calculations:
     """Calculate entity values."""
