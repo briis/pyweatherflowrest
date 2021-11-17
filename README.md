@@ -44,7 +44,7 @@ async def main() -> None:
 
     weatherflow = WeatherFlowApiClient("YOUR STATION ID", "YOUR TOKEN")
     try:
-        await weatherflow.initialize()
+        await weatherflow.initialize() # Must be the first call
 
     except WrongStationID as err:
         _LOGGER.debug(err)
