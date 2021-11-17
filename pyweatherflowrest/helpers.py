@@ -18,19 +18,19 @@ class Conversions:
         self.units = units
         self.homeassistant = homeassistant
 
-    async def temperature(self, value) -> float:
+    def temperature(self, value) -> float:
         """Returns celcius to Fahrenheit."""
         if value is None or self.units == UNIT_TYPE_METRIC or self.homeassistant:
             return value
         return round(value * 1.8 + 32, 1)
 
-    async def pressure(self, value) -> float:
+    def pressure(self, value) -> float:
         """Returns inHg from mb/hPa."""
         if value is None or self.units == UNIT_TYPE_METRIC:
             return value
         return round(value * 0.029530, 1)
 
-    async def rain(self, value) -> float:
+    def rain(self, value) -> float:
         """Converts rain units."""
         if value is None:
             return None
@@ -39,16 +39,16 @@ class Conversions:
             return round(value, 2)
         return round(value * 0.03937007874, 2)
 
-    async def rain_rate(self, value) -> float:
+    def rain_rate(self, value) -> float:
         """Calculates Rain Rate."""
         if value is None:
             return None
 
         _rain_rate = value * 60
 
-        return await self.rain(_rain_rate)
+        return self.rain(_rain_rate)
 
-    async def density(self, value) -> float:
+    def density(self, value) -> float:
         """Converts air density."""
         if value is None:
             return None
@@ -58,7 +58,7 @@ class Conversions:
 
         return round(value * 0.06243, 1)
 
-    async def distance(self, value) -> float:
+    def distance(self, value) -> float:
         """Conerts km to mi."""
         if value is None:
             return None
@@ -68,7 +68,7 @@ class Conversions:
 
         return round(value * 0.6213688756, 1)
         
-    async def windspeed(self, value, wind_unit_kmh: bool = False) -> float:
+    def windspeed(self, value, wind_unit_kmh: bool = False) -> float:
         """Returns miles per hour from m/s."""
         if value is None:
             return value
@@ -80,14 +80,14 @@ class Conversions:
 
         return round(value * 2.236936292, 1)
 
-    async def utc_from_timestamp(self, timestamp: int) -> datetime.datetime:
+    def utc_from_timestamp(self, timestamp: int) -> datetime.datetime:
         """Return a UTC time from a timestamp."""
         return UTC.localize(datetime.datetime.utcfromtimestamp(timestamp))
 
 class Calculations:
     """Calculate entity values."""
 
-    async def is_raining(self, rain):
+    def is_raining(self, rain):
         """Returns true if it is raining."""
         if rain is None:
             return None
@@ -95,14 +95,14 @@ class Calculations:
         rain_rate = rain * 60
         return rain_rate > 0
 
-    async def is_freezing(self, temperature):
+    def is_freezing(self, temperature):
         """Returns true if temperature below 0."""
         if temperature is None:
             return None
             
         return temperature < 0
 
-    async def day_forecast_extras(self, day_data, hour_data) -> float:
+    def day_forecast_extras(self, day_data, hour_data) -> float:
         """Returns accumulated precip for the day."""
         _precip = 0
         _wind_avg =[]
@@ -119,7 +119,7 @@ class Calculations:
 
         return {"precip": round(_precip, 1), "wind_avg": round(_sum_wind_avg, 1), "wind_direction": int(_sum_wind_bearing)}
 
-    async def visibility(self, elevation, air_temperature, relative_humidity, dewpoint) -> float:
+    def visibility(self, elevation, air_temperature, relative_humidity, dewpoint) -> float:
         """Returns the calculated visibility."""
 
         if elevation is None or air_temperature is None or relative_humidity is None or dewpoint is None:
@@ -142,7 +142,7 @@ class Calculations:
 
         return visibility_km
 
-    async def absolute_humidity(self, air_temperature, relative_humidity) -> float:
+    def absolute_humidity(self, air_temperature, relative_humidity) -> float:
         """Returns calculated absolute humidity."""
 
         if air_temperature is None or relative_humidity is None:
@@ -154,7 +154,7 @@ class Calculations:
 
         return round(abs_humidity, 2)
 
-    async def battery_percent(self, is_tempest: bool, voltage: float) -> int:
+    def battery_percent(self, is_tempest: bool, voltage: float) -> int:
         """Returns battery percentage from voltage."""
 
         if is_tempest is None or voltage is None:
@@ -177,7 +177,7 @@ class Calculations:
 
         return int(bat_percent)
 
-    async def beaufort(self, wind_speed: float) -> int:
+    def beaufort(self, wind_speed: float) -> int:
         """Returns Beaufort scale value from wind speed."""
 
         if wind_speed is None:
