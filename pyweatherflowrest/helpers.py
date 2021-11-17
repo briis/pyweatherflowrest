@@ -77,7 +77,7 @@ class Conversions:
 
         return round(value * 2.236936292, 1)
 
-    def utc_from_timestamp(self, timestamp: int) -> datetime.datetime:
+    def utc_from_timestamp(self, timestamp: int) -> str:
         """Return a UTC time from a timestamp."""
         return datetime.datetime.utcfromtimestamp(timestamp).isoformat()
 
