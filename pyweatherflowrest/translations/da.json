@@ -1,0 +1,38 @@
+{
+    "state": {
+        "uv": {
+            "extreme": "Ekstrem høj",
+            "very-high": "Meget høj",
+            "high": "Høj",
+            "moderate": "Moderat",
+            "low": "Lav",
+            "none": "Ingen data"
+        },
+        "precip_type": {
+            "none": "Ingen",
+            "rain": "Regn",
+            "hail": "Hagl",
+            "heavy-rain": "Kraftig regn"
+        },
+        "trend": {
+            "falling": "Falder",
+            "rising": "Stiger",
+            "steady": "Stabil"
+        },
+        "beaufort": {
+            "0": "Stille",
+            "1": "Næsten stille",
+            "2": "Svag vind",
+            "3": "Let vind",
+            "4": "Jævn vind",
+            "5": "Frisk vind",
+            "6": "Hård vind",
+            "7": "Stiv kuling",
+            "8": "Hård kuling",
+            "9": "Stormende kuling",
+            "10": "Storm",
+            "11": "Stærk storm",
+            "12": "Orkan"
+        }
+    }
+}
