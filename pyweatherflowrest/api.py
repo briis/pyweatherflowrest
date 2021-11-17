@@ -149,7 +149,7 @@ class WeatherFlowApiClient:
             if data is not None:
                 device = data["obs"][0]
                 self._observation_data.voltage_tempest = device[voltage_index]
-                self._observation_data.battery_tempest = await self.calc.battery_percent(self._station_data.is_tempest, device[voltage_index])
+                self._observation_data.battery_tempest = self.calc.battery_percent(self._station_data.is_tempest, device[voltage_index])
         else:
             self._device_id = self._station_data.air_device_id
             voltage_index = 6
@@ -157,7 +157,7 @@ class WeatherFlowApiClient:
             if data is not None:
                 device = data["obs"][0]
                 self._observation_data.voltage_air = device[voltage_index]
-                self._observation_data.battery_air = await self.calc.battery_percent(self._station_data.is_tempest, device[voltage_index])
+                self._observation_data.battery_air = self.calc.battery_percent(self._station_data.is_tempest, device[voltage_index])
 
             self._device_id = self._station_data.sky_device_id
             voltage_index = 8
@@ -165,7 +165,7 @@ class WeatherFlowApiClient:
             if data is not None:
                 device = data["obs"][0]
                 self._observation_data.voltage_sky = device[voltage_index]
-                self._observation_data.battery_sky = await self.calc.battery_percent(self._station_data.is_tempest, device[voltage_index])
+                self._observation_data.battery_sky = self.calc.battery_percent(self._station_data.is_tempest, device[voltage_index])
 
     async def update_observations(self) -> None:
         """Update observation data."""
@@ -175,7 +175,7 @@ class WeatherFlowApiClient:
         data = await self._api_request(self.observation_url)
         if data is not None:
             obervations = data['obs'][0]
-            visibility = await self.calc.visibility(
+            visibility = self.calc.visibility(
                 self._station_data.elevation,
                 obervations["air_temperature"],
                 obervations["relative_humidity"],
@@ -183,44 +183,44 @@ class WeatherFlowApiClient:
             )
             entity_data = ObservationDescription(
                 key=self.station_id,
-                utc_time=await self.cnv.utc_from_timestamp(obervations["timestamp"]),
-                air_temperature=await self.cnv.temperature(obervations["air_temperature"]),
-                barometric_pressure=await self.cnv.pressure(obervations["barometric_pressure"]),
-                station_pressure=await self.cnv.pressure(obervations["station_pressure"]),
-                sea_level_pressure=await self.cnv.pressure(obervations["sea_level_pressure"]),
+                utc_time=self.cnv.utc_from_timestamp(obervations["timestamp"]),
+                air_temperature=self.cnv.temperature(obervations["air_temperature"]),
+                barometric_pressure=self.cnv.pressure(obervations["barometric_pressure"]),
+                station_pressure=self.cnv.pressure(obervations["station_pressure"]),
+                sea_level_pressure=self.cnv.pressure(obervations["sea_level_pressure"]),
                 relative_humidity=obervations["relative_humidity"],
-                precip=await self.cnv.rain(obervations["precip"]),
-                precip_rate=await self.cnv.rain_rate(obervations["precip"]),
-                precip_accum_last_1hr=await self.cnv.rain(obervations["precip_accum_last_1hr"]),
-                precip_accum_local_day=await self.cnv.rain(obervations["precip_accum_local_day"]),
-                precip_accum_local_yesterday=await self.cnv.rain(obervations["precip_accum_local_yesterday"]),
+                precip=self.cnv.rain(obervations["precip"]),
+                precip_rate=self.cnv.rain_rate(obervations["precip"]),
+                precip_accum_last_1hr=self.cnv.rain(obervations["precip_accum_last_1hr"]),
+                precip_accum_local_day=self.cnv.rain(obervations["precip_accum_local_day"]),
+                precip_accum_local_yesterday=self.cnv.rain(obervations["precip_accum_local_yesterday"]),
                 precip_minutes_local_day=obervations["precip_minutes_local_day"],
                 precip_minutes_local_yesterday=obervations["precip_minutes_local_yesterday"],
-                wind_avg=await self.cnv.windspeed(obervations["wind_avg"]),
+                wind_avg=self.cnv.windspeed(obervations["wind_avg"]),
                 wind_direction=obervations["wind_direction"],
-                wind_gust=await self.cnv.windspeed(obervations["wind_gust"]),
-                wind_lull=await self.cnv.windspeed(obervations["wind_lull"]),
+                wind_gust=self.cnv.windspeed(obervations["wind_gust"]),
+                wind_lull=self.cnv.windspeed(obervations["wind_lull"]),
                 solar_radiation=obervations["solar_radiation"],
                 uv=obervations["uv"],
                 brightness=obervations["brightness"],
-                lightning_strike_last_epoch=await self.cnv.utc_from_timestamp(obervations["lightning_strike_last_epoch"]),
-                lightning_strike_last_distance=await self.cnv.distance(obervations["lightning_strike_last_distance"]),
+                lightning_strike_last_epoch=self.cnv.utc_from_timestamp(obervations["lightning_strike_last_epoch"]),
+                lightning_strike_last_distance=self.cnv.distance(obervations["lightning_strike_last_distance"]),
                 lightning_strike_count=obervations["lightning_strike_count"],
                 lightning_strike_count_last_1hr=obervations["lightning_strike_count_last_1hr"],
                 lightning_strike_count_last_3hr=obervations["lightning_strike_count_last_3hr"],
-                feels_like=await self.cnv.temperature(obervations["feels_like"]),
-                heat_index=await self.cnv.temperature(obervations["heat_index"]),
-                wind_chill=await self.cnv.temperature(obervations["wind_chill"]),
-                dew_point=await self.cnv.temperature(obervations["dew_point"]),
-                wet_bulb_temperature=await self.cnv.temperature(obervations["wet_bulb_temperature"]),
+                feels_like=self.cnv.temperature(obervations["feels_like"]),
+                heat_index=self.cnv.temperature(obervations["heat_index"]),
+                wind_chill=self.cnv.temperature(obervations["wind_chill"]),
+                dew_point=self.cnv.temperature(obervations["dew_point"]),
+                wet_bulb_temperature=self.cnv.temperature(obervations["wet_bulb_temperature"]),
                 delta_t=obervations["delta_t"],
                 air_density=obervations["air_density"],
                 pressure_trend=obervations["pressure_trend"],
-                is_raining=await self.calc.is_raining(obervations["precip"]),
-                is_freezing=await self.calc.is_freezing(obervations["air_temperature"]),
-                visibility=await self.cnv.distance(visibility),
-                absolute_humidity=await self.calc.absolute_humidity(obervations["air_temperature"], obervations["relative_humidity"]),
-                beaufort=await self.calc.beaufort(obervations["wind_avg"]),
+                is_raining=self.calc.is_raining(obervations["precip"]),
+                is_freezing=self.calc.is_freezing(obervations["air_temperature"]),
+                visibility=self.cnv.distance(visibility),
+                absolute_humidity=self.calc.absolute_humidity(obervations["air_temperature"], obervations["relative_humidity"]),
+                beaufort=self.calc.beaufort(obervations["wind_avg"]),
             )
             self._observation_data = entity_data
             await self._read_device_data()
@@ -240,33 +240,33 @@ class WeatherFlowApiClient:
             current = data['current_conditions']
             entity_data = ForecastDescription(
                 key=self.station_id,
-                utc_time=await self.cnv.utc_from_timestamp(current["time"]),
+                utc_time=self.cnv.utc_from_timestamp(current["time"]),
                 conditions=current["conditions"],
                 icon=current["icon"],
-                air_temperature=await self.cnv.temperature(current["air_temperature"]),
-                station_pressure=await self.cnv.pressure(current["station_pressure"]),
-                sea_level_pressure=await self.cnv.pressure(current["sea_level_pressure"]),
+                air_temperature=self.cnv.temperature(current["air_temperature"]),
+                station_pressure=self.cnv.pressure(current["station_pressure"]),
+                sea_level_pressure=self.cnv.pressure(current["sea_level_pressure"]),
                 pressure_trend=current["pressure_trend"],
                 relative_humidity=current["relative_humidity"],
-                wind_avg=await self.cnv.windspeed(current["wind_avg"], self.homeassistant),
+                wind_avg=self.cnv.windspeed(current["wind_avg"], self.homeassistant),
                 wind_direction=current["wind_direction"],
                 wind_direction_cardinal=current["wind_direction_cardinal"],
-                wind_gust=await self.cnv.windspeed(current["wind_gust"], self.homeassistant),
+                wind_gust=self.cnv.windspeed(current["wind_gust"], self.homeassistant),
                 solar_radiation=current["solar_radiation"],
                 uv=current["uv"],
                 brightness=current["brightness"],
-                feels_like=await self.cnv.temperature(current["feels_like"]),
-                dew_point=await self.cnv.temperature(current["dew_point"]),
-                wet_bulb_temperature=await self.cnv.temperature(current["wet_bulb_temperature"]),
+                feels_like=self.cnv.temperature(current["feels_like"]),
+                dew_point=self.cnv.temperature(current["dew_point"]),
+                wet_bulb_temperature=self.cnv.temperature(current["wet_bulb_temperature"]),
                 delta_t=current["delta_t"],
-                air_density=await self.cnv.density(current["air_density"]),
+                air_density=self.cnv.density(current["air_density"]),
                 lightning_strike_count_last_1hr=current["lightning_strike_count_last_1hr"],
                 lightning_strike_count_last_3hr=current["lightning_strike_count_last_3hr"],
                 lightning_strike_last_distance=current["lightning_strike_last_distance"],
                 lightning_strike_last_distance_msg=current["lightning_strike_last_distance_msg"],
-                lightning_strike_last_epoch=await self.cnv.utc_from_timestamp(current["lightning_strike_last_epoch"]),
-                precip_accum_local_day=await self.cnv.rain(current["precip_accum_local_day"]),
-                precip_accum_local_yesterday=await self.cnv.rain(current["precip_accum_local_yesterday"]),
+                lightning_strike_last_epoch=self.cnv.utc_from_timestamp(current["lightning_strike_last_epoch"]),
+                precip_accum_local_day=self.cnv.rain(current["precip_accum_local_day"]),
+                precip_accum_local_yesterday=self.cnv.rain(current["precip_accum_local_yesterday"]),
                 precip_minutes_local_day=current["precip_minutes_local_day"],
                 precip_minutes_local_yesterday=current["precip_minutes_local_yesterday"],
             )
@@ -277,20 +277,20 @@ class WeatherFlowApiClient:
             entity_data.temp_low_today = forecast_daily[0]["air_temp_low"]          
 
             for item in forecast_daily:
-                calc_values = await self.calc.day_forecast_extras(item, data["forecast"]["hourly"])
+                calc_values = self.calc.day_forecast_extras(item, data["forecast"]["hourly"])
                 day_item = ForecastDailyDescription(
-                    utc_time = await self.cnv.utc_from_timestamp(item["day_start_local"]),
+                    utc_time = self.cnv.utc_from_timestamp(item["day_start_local"]),
                     conditions = item["conditions"],
                     icon=item["icon"],
                     sunrise=item["sunrise"],
                     sunset=item["sunset"],
-                    air_temp_high=await self.cnv.temperature(item["air_temp_high"]),
-                    air_temp_low=await self.cnv.temperature(item["air_temp_low"]),
-                    precip=await self.cnv.rain(calc_values["precip"]),
+                    air_temp_high=self.cnv.temperature(item["air_temp_high"]),
+                    air_temp_low=self.cnv.temperature(item["air_temp_low"]),
+                    precip=self.cnv.rain(calc_values["precip"]),
                     precip_probability=item["precip_probability"],
                     precip_icon=item["precip_icon"],
                     precip_type=item["precip_type"],
-                    wind_avg=await self.cnv.windspeed(calc_values["wind_avg"], self.homeassistant),
+                    wind_avg=self.cnv.windspeed(calc_values["wind_avg"], self.homeassistant),
                     wind_direction=calc_values["wind_direction"],
                 )
                 entity_data.forecast_daily.append(day_item)
@@ -298,20 +298,20 @@ class WeatherFlowApiClient:
             forecast_hourly = data["forecast"]["hourly"]            
             for item in forecast_hourly:
                 hour_item = ForecastHourlyDescription(
-                    utc_time = await self.cnv.utc_from_timestamp(item["time"]),
+                    utc_time = self.cnv.utc_from_timestamp(item["time"]),
                     conditions = item["conditions"],
                     icon=item["icon"],
-                    air_temperature=await self.cnv.temperature(item["air_temperature"]),
-                    sea_level_pressure=await self.cnv.pressure(item["sea_level_pressure"]),
+                    air_temperature=self.cnv.temperature(item["air_temperature"]),
+                    sea_level_pressure=self.cnv.pressure(item["sea_level_pressure"]),
                     relative_humidity=item["relative_humidity"],
-                    precip=await self.cnv.rain(item["precip"]),
+                    precip=self.cnv.rain(item["precip"]),
                     precip_probability=item["precip_probability"],
-                    wind_avg=await self.cnv.windspeed(item["wind_avg"], self.homeassistant),
+                    wind_avg=self.cnv.windspeed(item["wind_avg"], self.homeassistant),
                     wind_direction=item["wind_direction"],
                     wind_direction_cardinal=item["wind_direction_cardinal"],
-                    wind_gust=await self.cnv.windspeed(item["wind_gust"], self.homeassistant),
+                    wind_gust=self.cnv.windspeed(item["wind_gust"], self.homeassistant),
                     uv=item["uv"],
-                    feels_like=await self.cnv.temperature(item["feels_like"]),
+                    feels_like=self.cnv.temperature(item["feels_like"]),
                 )
                 entity_data.forecast_hourly.append(hour_item)
             
