@@ -4,11 +4,8 @@ from __future__ import annotations
 import datetime
 import logging
 import math
-import pytz
 
 from pyweatherflowrest.const import UNIT_TYPE_METRIC
-
-UTC = pytz.utc
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -82,7 +79,7 @@ class Conversions:
 
     def utc_from_timestamp(self, timestamp: int) -> datetime.datetime:
         """Return a UTC time from a timestamp."""
-        return UTC.localize(datetime.datetime.utcfromtimestamp(timestamp))
+        return datetime.datetime.utcfromtimestamp(timestamp).isoformat()
 
 class Calculations:
     """Calculate entity values."""
