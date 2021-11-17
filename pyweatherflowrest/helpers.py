@@ -83,7 +83,7 @@ class Conversions:
 
     def utc_from_timestamp(self, timestamp: int) -> datetime.datetime:
         """Return a UTC time from a timestamp."""
-        utc_zone = tz.tzutc()
+        utc_zone = tz.gettz('Europe/Copenhagen')
         return datetime.datetime.utcfromtimestamp(timestamp).astimezone(utc_zone)
         # return UTC.localize(datetime.datetime.utcfromtimestamp(timestamp))
         # return datetime.datetime.utcfromtimestamp(timestamp).isoformat()
