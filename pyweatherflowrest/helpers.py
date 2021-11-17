@@ -211,3 +211,21 @@ class Calculations:
             bft_value = 0
 
         return bft_value
+
+    def uv_description(self, uv: float) -> str:
+        """Returns a Description based on uv value."""
+        if uv is None:
+            return None
+
+        if uv >= 10.5:
+            return "extreme"
+        if uv >= 7.5:
+            return "very-high"
+        if uv >= 5.5:
+            return "high"
+        if uv >= 2.5:
+            return "moderate"
+        if uv > 0:
+            return "low"
+
+        return "none"

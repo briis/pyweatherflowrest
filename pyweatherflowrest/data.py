@@ -34,6 +34,7 @@ class ObservationDescription:
     beaufort: float | None = None
     solar_radiation: float | None = None
     uv: float | None = None
+    uv_description: str | None = None
     brightness: int | None = None
     lightning_strike_last_epoch: int | None = None
     lightning_strike_last_distance: int | None = None

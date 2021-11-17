@@ -202,6 +202,7 @@ class WeatherFlowApiClient:
                 wind_lull=self.cnv.windspeed(obervations["wind_lull"]),
                 solar_radiation=obervations["solar_radiation"],
                 uv=obervations["uv"],
+                uv_description=self.calc.uv_description(obervations["uv"]),
                 brightness=obervations["brightness"],
                 lightning_strike_last_epoch=self.cnv.utc_from_timestamp(obervations["lightning_strike_last_epoch"]),
                 lightning_strike_last_distance=self.cnv.distance(obervations["lightning_strike_last_distance"]),
