@@ -229,17 +229,3 @@ class Calculations:
             return "low"
 
         return "none"
-
-class Translations:
-    """A text translation class."""
-    def __init__(self, translations: str) -> None:
-        self.translations = translations
-
-    def localtext(self, section: str, entity: str, text_string: str) -> str:
-        """Returns a translated string."""
-        if self.translations is None or section is None or entity is None or text_string is None:
-            return text_string
-
-        return self.translations[section][entity][text_string.strip()]
-
-        

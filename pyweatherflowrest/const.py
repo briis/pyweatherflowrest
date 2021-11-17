@@ -8,8 +8,6 @@ DEVICE_TYPE_AIR = "air"
 DEVICE_TYPE_SKY="sky"
 DEVICE_TYPE_HUB = "hub"
 
-DOMAIN = "pyweatherflowrest"
-
 FIELDS_PRESSURRE = ["station_pressure", "sea_level_pressure"]
 FIELDS_WIND = ["wind_avg", "wind_gust", "wind_lull"]
 
@@ -17,12 +15,6 @@ UNIT_TYPE_METRIC = "metric"
 UNIT_TYPE_IMPERIAL = "imperial"
 VALID_UNIT_TYPES = [UNIT_TYPE_IMPERIAL, UNIT_TYPE_METRIC]
 
-LANGUAGE_DA = "da"
-LANGUAGE_EN = "en"
-SUPPORTED_LANGUAGES = [
-    LANGUAGE_DA,
-    LANGUAGE_EN,
-]
 WEATHERFLOW_BASE_URL = "https://swd.weatherflow.com/swd/rest"
 WEATHERFLOW_DEVICE_BASE_URL = f"{WEATHERFLOW_BASE_URL}/observations/device/"
 WEATHERFLOW_FORECAST_BASE_URL = f"{WEATHERFLOW_BASE_URL}/better_forecast?station_id="

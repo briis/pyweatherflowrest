@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import aiohttp
 from aiohttp import client_exceptions
-import json as pjson
 import logging
 from typing import Optional
 
@@ -12,9 +11,6 @@ from pyweatherflowrest.const import (
     DEVICE_TYPE_HUB,
     DEVICE_TYPE_SKY,
     DEVICE_TYPE_TEMPEST,
-    DOMAIN,
-    LANGUAGE_EN,
-    SUPPORTED_LANGUAGES,
     UNIT_TYPE_METRIC,
     VALID_UNIT_TYPES,
     WEATHERFLOW_DEVICE_BASE_URL,
@@ -30,7 +26,7 @@ from pyweatherflowrest.data import (
     ForecastHourlyDescription,
 )
 from pyweatherflowrest.exceptions import  Invalid,  BadRequest, WrongStationID, NotAuthorized
-from pyweatherflowrest.helpers import Conversions, Calculations, Translations
+from pyweatherflowrest.helpers import Conversions, Calculations
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -42,7 +38,6 @@ class WeatherFlowApiClient:
         self,
         station_id: int,
         api_token: str,
-        language: Optional[str] = LANGUAGE_EN,
         units: Optional[str] = UNIT_TYPE_METRIC,
         homeassistant: Optional(bool) = True,
         session: Optional[aiohttp.ClientSession] = None,
@@ -51,8 +46,6 @@ class WeatherFlowApiClient:
         self.api_token = api_token
         self.units = units
         self.homeassistant = homeassistant
-        self.language = language
-        self.translations = None
 
         if self.units not in VALID_UNIT_TYPES:
             self.units = UNIT_TYPE_METRIC
@@ -62,7 +55,6 @@ class WeatherFlowApiClient:
         self.req = session
         self.cnv = None
         self.calc = Calculations()
-        self.trans = None
 
         self._station_data: StationDescription = None
         self._observation_data: ObservationDescription = None
@@ -146,8 +138,6 @@ class WeatherFlowApiClient:
 
             self._station_data = entity_data
             self.cnv = Conversions(self.units, self.homeassistant, self._station_data.timezone)
-            self.translations = await self._get_language_strings()
-            self.trans = Translations(self.translations)
 
 
     async def _read_device_data(self) -> None:
@@ -213,7 +203,7 @@ class WeatherFlowApiClient:
                 wind_lull=self.cnv.windspeed(obervations["wind_lull"]),
                 solar_radiation=obervations["solar_radiation"],
                 uv=obervations["uv"],
-                uv_description=self.trans.localtext("state", "uv", self.calc.uv_description(obervations["uv"])),
+                uv_description=self.calc.uv_description(obervations["uv"]),
                 brightness=obervations["brightness"],
                 lightning_strike_last_epoch=self.cnv.utc_from_timestamp(obervations["lightning_strike_last_epoch"]),
                 lightning_strike_last_distance=self.cnv.distance(obervations["lightning_strike_last_distance"]),
@@ -227,7 +217,7 @@ class WeatherFlowApiClient:
                 wet_bulb_temperature=self.cnv.temperature(obervations["wet_bulb_temperature"]),
                 delta_t=obervations["delta_t"],
                 air_density=obervations["air_density"],
-                pressure_trend=self.trans.localtext("state", "trend", obervations["pressure_trend"]),
+                pressure_trend=obervations["pressure_trend"],
                 is_raining=self.calc.is_raining(obervations["precip"]),
                 is_freezing=self.calc.is_freezing(obervations["air_temperature"]),
                 visibility=self.cnv.distance(visibility),
@@ -352,24 +342,6 @@ class WeatherFlowApiClient:
         }
 
         return units_list
-
-    async def _get_language_strings(self) -> str:
-        """Return the language file json array."""
-        try:
-            if self.language not in SUPPORTED_LANGUAGES:
-                filename = f"{DOMAIN}/translations/en.json"
-            else:
-                filename = f"{DOMAIN}/translations/{self.language}.json"
-
-            with open(filename, "r") as json_file:
-                return pjson.load(json_file)
-
-        except FileNotFoundError as e:
-            _LOGGER.error("Could not read language file. Error message: %s", e)
-            return None
-        except Exception as e:
-            _LOGGER.error("Could not read language file. Error message: %s", e)
-            return None
 
     async def _api_request(
         self,
