@@ -264,7 +264,7 @@ class Calculations:
         if wind_speed > 32.7:
             bft_description = "hurricane"
         elif wind_speed >= 28.5:
-            bft_description = "violent_storn"
+            bft_description = "violent_storm"
         elif wind_speed >= 24.5:
             bft_description = "storm"
         elif wind_speed >= 20.8:
