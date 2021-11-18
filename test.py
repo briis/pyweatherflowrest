@@ -41,20 +41,20 @@ async def main() -> None:
             print(field,"-", value)
 
 
-    # data: ForecastDescription = await weatherflow.update_forecast()
-    # if data is not None:
-    #     for field in data.__dataclass_fields__:
-    #         value = getattr(data, field)
-    #         if field == "forecast_daily":
-    #             # continue
-    #             for item in value:
-    #                 print(item.conditions, item.air_temp_high, item.precip, item.wind_avg, item.wind_direction)
-    #         elif field == "forecast_hourly":
-    #             continue
-    #             for item in value:
-    #                 print(item.conditions, item.air_temperature)
-    #         else:
-    #             print(field,"-", value)
+    data: ForecastDescription = await weatherflow.update_forecast()
+    if data is not None:
+        for field in data.__dataclass_fields__:
+            value = getattr(data, field)
+            if field == "forecast_daily":
+                # continue
+                for item in value:
+                    print(item.utc_time, item.conditions, item.air_temp_high, item.precip, item.wind_avg, item.wind_direction)
+            elif field == "forecast_hourly":
+                continue
+                for item in value:
+                    print(item.conditions, item.air_temperature)
+            else:
+                print(field,"-", value)
 
     end = time.time()
 

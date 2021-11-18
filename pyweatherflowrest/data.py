@@ -178,13 +178,6 @@ class ForecastDescription:
     forecast_hourly: list[ForecastHourlyDescription] = field(default_factory=list) 
 
 @dataclass
-class ConversionDescription:
-    """A class that describes how to convert entities."""
-
-    field_type: List
-    function: str
-
-@dataclass
 class BeaufortDescription:
     """A class that describes beaufort values."""
 
