@@ -6,6 +6,7 @@ import logging
 import math
 
 from pyweatherflowrest.const import UNIT_TYPE_METRIC
+from pyweatherflowrest.data import BeaufortValues
 
 UTC = dt.timezone.utc
 
@@ -176,41 +177,6 @@ class Calculations:
 
         return int(bat_percent)
 
-    def beaufort(self, wind_speed: float) -> int:
-        """Returns Beaufort scale value from wind speed."""
-
-        if wind_speed is None:
-            return None
-
-        if wind_speed > 32.7:
-            bft_value = 12
-        elif wind_speed >= 28.5:
-            bft_value = 11
-        elif wind_speed >= 24.5:
-            bft_value = 10
-        elif wind_speed >= 20.8:
-            bft_value = 9
-        elif wind_speed >= 17.2:
-            bft_value = 8
-        elif wind_speed >= 13.9:
-            bft_value = 7
-        elif wind_speed >= 10.8:
-            bft_value = 6
-        elif wind_speed >= 8.0:
-            bft_value = 5
-        elif wind_speed >= 5.5:
-            bft_value = 4
-        elif wind_speed >= 3.4:
-            bft_value = 3
-        elif wind_speed >= 1.6:
-            bft_value = 2
-        elif wind_speed >= 0.3:
-            bft_value = 1
-        else:
-            bft_value = 0
-
-        return bft_value
-
     def uv_description(self, uv: float) -> str:
         """Returns a Description based on uv value."""
         if uv is None:
@@ -255,37 +221,75 @@ class Calculations:
         ]
         return direction_array[int((wind_bearing + 11.25) / 22.5)]     
 
-    def beaufort_description(self, wind_speed: float) -> str:
-        """Returns descriptive beaufort value."""
-
+    def beaufort(self, wind_speed: float) -> BeaufortValues:
+        """Retruns data structure with Beaufort values."""
         if wind_speed is None:
             return None
 
         if wind_speed > 32.7:
-            bft_description = "hurricane"
+            bft = BeaufortValues(
+                value=12,
+                description="hurricane"
+            )
         elif wind_speed >= 28.5:
-            bft_description = "violent_storm"
+            bft = BeaufortValues(
+                value=11,
+                description="violent_storm"
+            )
         elif wind_speed >= 24.5:
-            bft_description = "storm"
+            bft = BeaufortValues(
+                value=10,
+                description="storm"
+            )
         elif wind_speed >= 20.8:
-            bft_description = "strong_gale"
+            bft = BeaufortValues(
+                value=9,
+                description="strong_gale"
+            )
         elif wind_speed >= 17.2:
-            bft_description = "fresh_gale"
+            bft = BeaufortValues(
+                value=8,
+                description="fresh_gale"
+            )
         elif wind_speed >= 13.9:
-            bft_description = "moderate_gale"
+            bft = BeaufortValues(
+                value=7,
+                description="moderate_gale"
+            )
         elif wind_speed >= 10.8:
-            bft_description = "strong_breeze"
+            bft = BeaufortValues(
+                value=6,
+                description="strong_breeze"
+            )
         elif wind_speed >= 8.0:
-            bft_description = "fresh_breeze"
+            bft = BeaufortValues(
+                value=5,
+                description="fresh_breeze"
+            )
         elif wind_speed >= 5.5:
-            bft_description = "moderate_breeze"
+            bft = BeaufortValues(
+                value=4,
+                description="moderate_breeze"
+            )
         elif wind_speed >= 3.4:
-            bft_description = "gentle_breeze"
+            bft = BeaufortValues(
+                value=3,
+                description="gentle_breeze"
+            )
         elif wind_speed >= 1.6:
-            bft_description = "light_breeze"
+            bft = BeaufortValues(
+                value=2,
+                description="light_breeze"
+            )
         elif wind_speed >= 0.3:
-            bft_description = "light_air"
+            bft = BeaufortValues(
+                value=1,
+                description="light_air"
+            )
         else:
-            bft_description = "calm"
+            bft = BeaufortValues(
+                value=0,
+                description="calm"
+            )
 
-        return bft_description
+        return bft

@@ -24,6 +24,7 @@ from pyweatherflowrest.data import (
     ForecastDescription,
     ForecastDailyDescription,
     ForecastHourlyDescription,
+    BeaufortValues,
 )
 from pyweatherflowrest.exceptions import  Invalid,  BadRequest, WrongStationID, NotAuthorized
 from pyweatherflowrest.helpers import Conversions, Calculations
@@ -175,12 +176,15 @@ class WeatherFlowApiClient:
         data = await self._api_request(self.observation_url)
         if data is not None:
             obervations = data['obs'][0]
+
             visibility = self.calc.visibility(
                 self._station_data.elevation,
                 obervations["air_temperature"],
                 obervations["relative_humidity"],
                 obervations["dew_point"]
             )
+            beaufort: BeaufortValues = self.calc.beaufort(obervations["wind_avg"])
+            
             entity_data = ObservationDescription(
                 key=self.station_id,
                 utc_time=self.cnv.utc_from_timestamp(obervations["timestamp"]),
@@ -222,8 +226,8 @@ class WeatherFlowApiClient:
                 is_freezing=self.calc.is_freezing(obervations["air_temperature"]),
                 visibility=self.cnv.distance(visibility),
                 absolute_humidity=self.calc.absolute_humidity(obervations["air_temperature"], obervations["relative_humidity"]),
-                beaufort=self.calc.beaufort(obervations["wind_avg"]),
-                beaufort_description=self.calc.beaufort_description(obervations["wind_avg"]),
+                beaufort=beaufort.value,
+                beaufort_description=beaufort.description,
             )
             self._observation_data = entity_data
             await self._read_device_data()
