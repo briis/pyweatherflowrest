@@ -6,7 +6,7 @@ import logging
 import math
 
 from pyweatherflowrest.const import UNIT_TYPE_METRIC
-from pyweatherflowrest.data import BeaufortValues
+from pyweatherflowrest.data import BeaufortDescription
 
 UTC = dt.timezone.utc
 
@@ -221,73 +221,73 @@ class Calculations:
         ]
         return direction_array[int((wind_bearing + 11.25) / 22.5)]     
 
-    def beaufort(self, wind_speed: float) -> BeaufortValues:
+    def beaufort(self, wind_speed: float) -> BeaufortDescription:
         """Retruns data structure with Beaufort values."""
         if wind_speed is None:
             return None
 
         if wind_speed > 32.7:
-            bft = BeaufortValues(
+            bft = BeaufortDescription(
                 value=12,
                 description="hurricane"
             )
         elif wind_speed >= 28.5:
-            bft = BeaufortValues(
+            bft = BeaufortDescription(
                 value=11,
                 description="violent_storm"
             )
         elif wind_speed >= 24.5:
-            bft = BeaufortValues(
+            bft = BeaufortDescription(
                 value=10,
                 description="storm"
             )
         elif wind_speed >= 20.8:
-            bft = BeaufortValues(
+            bft = BeaufortDescription(
                 value=9,
                 description="strong_gale"
             )
         elif wind_speed >= 17.2:
-            bft = BeaufortValues(
+            bft = BeaufortDescription(
                 value=8,
                 description="fresh_gale"
             )
         elif wind_speed >= 13.9:
-            bft = BeaufortValues(
+            bft = BeaufortDescription(
                 value=7,
                 description="moderate_gale"
             )
         elif wind_speed >= 10.8:
-            bft = BeaufortValues(
+            bft = BeaufortDescription(
                 value=6,
                 description="strong_breeze"
             )
         elif wind_speed >= 8.0:
-            bft = BeaufortValues(
+            bft = BeaufortDescription(
                 value=5,
                 description="fresh_breeze"
             )
         elif wind_speed >= 5.5:
-            bft = BeaufortValues(
+            bft = BeaufortDescription(
                 value=4,
                 description="moderate_breeze"
             )
         elif wind_speed >= 3.4:
-            bft = BeaufortValues(
+            bft = BeaufortDescription(
                 value=3,
                 description="gentle_breeze"
             )
         elif wind_speed >= 1.6:
-            bft = BeaufortValues(
+            bft = BeaufortDescription(
                 value=2,
                 description="light_breeze"
             )
         elif wind_speed >= 0.3:
-            bft = BeaufortValues(
+            bft = BeaufortDescription(
                 value=1,
                 description="light_air"
             )
         else:
-            bft = BeaufortValues(
+            bft = BeaufortDescription(
                 value=0,
                 description="calm"
             )

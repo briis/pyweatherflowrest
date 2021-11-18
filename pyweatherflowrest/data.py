@@ -182,9 +182,9 @@ class ConversionDescription:
 
     field_type: List
     function: str
-    
+
 @dataclass
-class BeaufortValues:
+class BeaufortDescription:
     """A class that describes beaufort values."""
 
     value: int
