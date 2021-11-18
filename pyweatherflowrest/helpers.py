@@ -1,21 +1,21 @@
 """Helper Class for Weatherflow Rest module."""
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 import logging
 import math
-from dateutil import tz
 
 from pyweatherflowrest.const import UNIT_TYPE_METRIC
+
+UTC = dt.timezone.utc
 
 _LOGGER = logging.getLogger(__name__)
 
 class Conversions:
     """Converts values from metric."""
-    def __init__(self, units: str, homeassistant: bool, timezone: str) -> None:
+    def __init__(self, units: str, homeassistant: bool) -> None:
         self.units = units
         self.homeassistant = homeassistant
-        self.timezone = timezone
 
     def temperature(self, value) -> float:
         """Returns celcius to Fahrenheit."""
@@ -79,10 +79,9 @@ class Conversions:
 
         return round(value * 2.236936292, 1)
 
-    def utc_from_timestamp(self, timestamp: int) -> datetime.datetime:
+    def utc_from_timestamp(self, timestamp: int) -> dt.datetime:
         """Return a UTC time from a timestamp."""
-        utc_zone = tz.gettz(self.timezone)
-        return datetime.datetime.utcfromtimestamp(timestamp).astimezone(utc_zone)
+        return dt.datetime.utcfromtimestamp(timestamp).replace(tzinfo=UTC)
 
 class Calculations:
     """Calculate entity values."""

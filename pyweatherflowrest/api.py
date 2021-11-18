@@ -53,7 +53,7 @@ class WeatherFlowApiClient:
         if session is None:
             session = aiohttp.ClientSession()
         self.req = session
-        self.cnv = None
+        self.cnv = Conversions(self.units, self.homeassistant)
         self.calc = Calculations()
 
         self._station_data: StationDescription = None
@@ -137,7 +137,6 @@ class WeatherFlowApiClient:
                     entity_data.sky_serial_number = device["serial_number"]
 
             self._station_data = entity_data
-            self.cnv = Conversions(self.units, self.homeassistant, self._station_data.timezone)
 
 
     async def _read_device_data(self) -> None:
