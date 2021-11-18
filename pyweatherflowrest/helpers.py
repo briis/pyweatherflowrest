@@ -228,3 +228,29 @@ class Calculations:
             return "low"
 
         return "none"
+
+    def wind_direction(self, wind_bearing: int) -> str:
+        """Returns a Wind Directions String from Wind Bearing."""
+        if wind_bearing is None:
+            return None
+
+        direction_array = [
+            "n",
+            "nne",
+            "ne",
+            "ene",
+            "e",
+            "ese",
+            "se",
+            "sse",
+            "s",
+            "ssw",
+            "sw",
+            "wsw",
+            "w",
+            "wnw",
+            "nw",
+            "nnw",
+            "n",
+        ]
+        return direction_array[int((wind_bearing + 11.25) / 22.5)]     

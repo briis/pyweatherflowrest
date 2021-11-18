@@ -198,6 +198,7 @@ class WeatherFlowApiClient:
                 precip_minutes_local_yesterday=obervations["precip_minutes_local_yesterday"],
                 wind_avg=self.cnv.windspeed(obervations["wind_avg"]),
                 wind_direction=obervations["wind_direction"],
+                wind_cardinal=self.calc.wind_direction(obervations["wind_direction"]),
                 wind_gust=self.cnv.windspeed(obervations["wind_gust"]),
                 wind_lull=self.cnv.windspeed(obervations["wind_lull"]),
                 solar_radiation=obervations["solar_radiation"],

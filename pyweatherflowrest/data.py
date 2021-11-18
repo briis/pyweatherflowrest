@@ -29,6 +29,7 @@ class ObservationDescription:
     precip_minutes_local_yesterday: int | None = None
     wind_avg: float | None = None
     wind_direction: int | None = None
+    wind_cardinal: str | None = None
     wind_gust: float | None = None
     wind_lull: float | None = None
     beaufort: float | None = None
