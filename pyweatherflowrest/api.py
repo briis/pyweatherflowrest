@@ -223,6 +223,7 @@ class WeatherFlowApiClient:
                 visibility=self.cnv.distance(visibility),
                 absolute_humidity=self.calc.absolute_humidity(obervations["air_temperature"], obervations["relative_humidity"]),
                 beaufort=self.calc.beaufort(obervations["wind_avg"]),
+                beaufort_description=self.calc.beaufort_description(obervations["wind_avg"]),
             )
             self._observation_data = entity_data
             await self._read_device_data()

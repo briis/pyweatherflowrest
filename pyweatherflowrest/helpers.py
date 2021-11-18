@@ -254,3 +254,38 @@ class Calculations:
             "n",
         ]
         return direction_array[int((wind_bearing + 11.25) / 22.5)]     
+
+    def beaufort_description(self, wind_speed: float) -> str:
+        """Returns descriptive beaufort value."""
+
+        if wind_speed is None:
+            return None
+
+        if wind_speed > 32.7:
+            bft_description = "hurricane"
+        elif wind_speed >= 28.5:
+            bft_description = "violent_storn"
+        elif wind_speed >= 24.5:
+            bft_description = "storm"
+        elif wind_speed >= 20.8:
+            bft_description = "strong_gale"
+        elif wind_speed >= 17.2:
+            bft_description = "fresh_gale"
+        elif wind_speed >= 13.9:
+            bft_description = "moderate_gale"
+        elif wind_speed >= 10.8:
+            bft_description = "strong_breeze"
+        elif wind_speed >= 8.0:
+            bft_description = "fresh_breeze"
+        elif wind_speed >= 5.5:
+            bft_description = "moderate_breeze"
+        elif wind_speed >= 3.4:
+            bft_description = "gentle_breeze"
+        elif wind_speed >= 1.6:
+            bft_description = "light_breeze"
+        elif wind_speed >= 0.3:
+            bft_description = "light_air"
+        else:
+            bft_description = "calm"
+
+        return bft_description

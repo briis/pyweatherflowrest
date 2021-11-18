@@ -32,7 +32,8 @@ class ObservationDescription:
     wind_cardinal: str | None = None
     wind_gust: float | None = None
     wind_lull: float | None = None
-    beaufort: float | None = None
+    beaufort: int | None = None
+    beaufort_description: str | None = None
     solar_radiation: float | None = None
     uv: float | None = None
     uv_description: str | None = None
