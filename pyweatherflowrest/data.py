@@ -22,6 +22,7 @@ class ObservationDescription:
     absolute_humidity: int | None = None
     precip: float | None = None
     precip_rate: float | None = None
+    precip_intensity: str | None = None
     precip_accum_last_1hr: float | None = None
     precip_accum_local_day: float | None = None
     precip_accum_local_yesterday: float | None = None

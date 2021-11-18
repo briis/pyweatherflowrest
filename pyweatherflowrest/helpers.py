@@ -293,3 +293,28 @@ class Calculations:
             )
 
         return bft
+
+    def precip_intensity(self, precip: float) -> str:
+        """Returns text string with WeatherFlow Precip Intensity."""
+
+        if precip is None:
+            return None
+
+        rain_rate = precip * 60
+
+        if rain_rate == 0:
+            intensity = "none"
+        elif rain_rate < 0.25:
+            intensity = "very_light"
+        elif rain_rate < 1:
+            intensity = "light"
+        elif rain_rate < 4:
+            intensity = "moderate"
+        elif rain_rate < 16:
+            intensity = "heavy"
+        elif rain_rate < 50:
+            intensity = "very_heavy"
+        else:
+            intensity = "extreme"
+
+        return intensity

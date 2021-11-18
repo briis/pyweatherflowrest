@@ -195,6 +195,7 @@ class WeatherFlowApiClient:
                 relative_humidity=obervations["relative_humidity"],
                 precip=self.cnv.rain(obervations["precip"]),
                 precip_rate=self.cnv.rain_rate(obervations["precip"]),
+                precip_intensity=self.calc.precip_intensity(obervations["precip"]),
                 precip_accum_last_1hr=self.cnv.rain(obervations["precip_accum_last_1hr"]),
                 precip_accum_local_day=self.cnv.rain(obervations["precip_accum_local_day"]),
                 precip_accum_local_yesterday=self.cnv.rain(obervations["precip_accum_local_yesterday"]),
