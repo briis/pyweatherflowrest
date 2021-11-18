@@ -53,7 +53,7 @@ class WeatherFlowApiClient:
         if session is None:
             session = aiohttp.ClientSession()
         self.req = session
-        self.cnv = None
+        self.cnv = Conversions(self.units, self.homeassistant)
         self.calc = Calculations()
 
         self._station_data: StationDescription = None
@@ -137,7 +137,6 @@ class WeatherFlowApiClient:
                     entity_data.sky_serial_number = device["serial_number"]
 
             self._station_data = entity_data
-            self.cnv = Conversions(self.units, self.homeassistant, self._station_data.timezone)
 
 
     async def _read_device_data(self) -> None:
@@ -199,6 +198,7 @@ class WeatherFlowApiClient:
                 precip_minutes_local_yesterday=obervations["precip_minutes_local_yesterday"],
                 wind_avg=self.cnv.windspeed(obervations["wind_avg"]),
                 wind_direction=obervations["wind_direction"],
+                wind_cardinal=self.calc.wind_direction(obervations["wind_direction"]),
                 wind_gust=self.cnv.windspeed(obervations["wind_gust"]),
                 wind_lull=self.cnv.windspeed(obervations["wind_lull"]),
                 solar_radiation=obervations["solar_radiation"],
@@ -223,6 +223,7 @@ class WeatherFlowApiClient:
                 visibility=self.cnv.distance(visibility),
                 absolute_humidity=self.calc.absolute_humidity(obervations["air_temperature"], obervations["relative_humidity"]),
                 beaufort=self.calc.beaufort(obervations["wind_avg"]),
+                beaufort_description=self.calc.beaufort_description(obervations["wind_avg"]),
             )
             self._observation_data = entity_data
             await self._read_device_data()

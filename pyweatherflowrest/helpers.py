@@ -1,21 +1,21 @@
 """Helper Class for Weatherflow Rest module."""
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 import logging
 import math
-from dateutil import tz
 
 from pyweatherflowrest.const import UNIT_TYPE_METRIC
+
+UTC = dt.timezone.utc
 
 _LOGGER = logging.getLogger(__name__)
 
 class Conversions:
     """Converts values from metric."""
-    def __init__(self, units: str, homeassistant: bool, timezone: str) -> None:
+    def __init__(self, units: str, homeassistant: bool) -> None:
         self.units = units
         self.homeassistant = homeassistant
-        self.timezone = timezone
 
     def temperature(self, value) -> float:
         """Returns celcius to Fahrenheit."""
@@ -79,10 +79,9 @@ class Conversions:
 
         return round(value * 2.236936292, 1)
 
-    def utc_from_timestamp(self, timestamp: int) -> datetime.datetime:
+    def utc_from_timestamp(self, timestamp: int) -> dt.datetime:
         """Return a UTC time from a timestamp."""
-        utc_zone = tz.gettz(self.timezone)
-        return datetime.datetime.utcfromtimestamp(timestamp).astimezone(utc_zone)
+        return dt.datetime.utcfromtimestamp(timestamp).replace(tzinfo=UTC)
 
 class Calculations:
     """Calculate entity values."""
@@ -229,3 +228,64 @@ class Calculations:
             return "low"
 
         return "none"
+
+    def wind_direction(self, wind_bearing: int) -> str:
+        """Returns a Wind Directions String from Wind Bearing."""
+        if wind_bearing is None:
+            return None
+
+        direction_array = [
+            "n",
+            "nne",
+            "ne",
+            "ene",
+            "e",
+            "ese",
+            "se",
+            "sse",
+            "s",
+            "ssw",
+            "sw",
+            "wsw",
+            "w",
+            "wnw",
+            "nw",
+            "nnw",
+            "n",
+        ]
+        return direction_array[int((wind_bearing + 11.25) / 22.5)]     
+
+    def beaufort_description(self, wind_speed: float) -> str:
+        """Returns descriptive beaufort value."""
+
+        if wind_speed is None:
+            return None
+
+        if wind_speed > 32.7:
+            bft_description = "hurricane"
+        elif wind_speed >= 28.5:
+            bft_description = "violent_storm"
+        elif wind_speed >= 24.5:
+            bft_description = "storm"
+        elif wind_speed >= 20.8:
+            bft_description = "strong_gale"
+        elif wind_speed >= 17.2:
+            bft_description = "fresh_gale"
+        elif wind_speed >= 13.9:
+            bft_description = "moderate_gale"
+        elif wind_speed >= 10.8:
+            bft_description = "strong_breeze"
+        elif wind_speed >= 8.0:
+            bft_description = "fresh_breeze"
+        elif wind_speed >= 5.5:
+            bft_description = "moderate_breeze"
+        elif wind_speed >= 3.4:
+            bft_description = "gentle_breeze"
+        elif wind_speed >= 1.6:
+            bft_description = "light_breeze"
+        elif wind_speed >= 0.3:
+            bft_description = "light_air"
+        else:
+            bft_description = "calm"
+
+        return bft_description
