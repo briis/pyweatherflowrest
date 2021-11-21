@@ -233,7 +233,7 @@ class WeatherFlowApiClient:
             self._observation_data = entity_data
             await self._read_device_data()
 
-            return entity_data
+            return self._observation_data
 
         return None
 
