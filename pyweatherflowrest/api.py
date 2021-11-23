@@ -26,16 +26,17 @@ from pyweatherflowrest.data import (
     ForecastHourlyDescription,
     BeaufortDescription,
 )
-from pyweatherflowrest.exceptions import  Invalid,  BadRequest, WrongStationID, NotAuthorized
+from pyweatherflowrest.exceptions import Invalid, BadRequest, WrongStationID, NotAuthorized
 from pyweatherflowrest.helpers import Conversions, Calculations
 
 _LOGGER = logging.getLogger(__name__)
 
 class WeatherFlowApiClient:
+    """Base Api Class."""
 
     req: aiohttp.ClientSession
 
-    def __init__ (
+    def __init__(
         self,
         station_id: int,
         api_token: str,
@@ -43,6 +44,7 @@ class WeatherFlowApiClient:
         homeassistant: Optional(bool) = True,
         session: Optional[aiohttp.ClientSession] = None,
     ) -> None:
+        """Initialize Api Class."""
         self.station_id = station_id
         self.api_token = api_token
         self.units = units
@@ -64,7 +66,7 @@ class WeatherFlowApiClient:
 
     @property
     def station_data(self) -> StationDescription:
-        """Returns Station Data."""
+        """Return Station Data."""
         return self._station_data
 
     @property
@@ -84,12 +86,11 @@ class WeatherFlowApiClient:
 
     @property
     def station_url(self) -> str:
-        """Base Rest Url for station Data"""
+        """Rest Url for station Data."""
         return f"{WEATHERFLOW_STATIONS_BASE_URL}{self.station_id}?token={self.api_token}"
 
     async def initialize(self) -> None:
         """Initialize data tables."""
-
         data = await self._api_request(self.station_url)
 
         if data is not None:
@@ -113,36 +114,34 @@ class WeatherFlowApiClient:
             for device in station["devices"]:
                 if device["device_type"] == "HB":
                     entity_data.hub_device_id = device["device_id"]
-                    entity_data.hub_device_type=DEVICE_TYPE_HUB
+                    entity_data.hub_device_type = DEVICE_TYPE_HUB
                     entity_data.hub_hardware_revision = device["hardware_revision"]
                     entity_data.hub_firmware_revision = device["firmware_revision"]
                     entity_data.hub_serial_number = device["serial_number"]
                 if device["device_type"] == "ST":
                     entity_data.tempest_device_id = device["device_id"]
-                    entity_data.tempest_device_type=DEVICE_TYPE_TEMPEST
+                    entity_data.tempest_device_type = DEVICE_TYPE_TEMPEST
                     entity_data.tempest_hardware_revision = device["hardware_revision"]
                     entity_data.tempest_firmware_revision = device["firmware_revision"]
                     entity_data.tempest_serial_number = device["serial_number"]
                     entity_data.is_tempest = True
                 if device["device_type"] == "AR":
                     entity_data.air_device_id = device["device_id"]
-                    entity_data.air_device_type=DEVICE_TYPE_AIR
+                    entity_data.air_device_type = DEVICE_TYPE_AIR
                     entity_data.air_hardware_revision = device["hardware_revision"]
                     entity_data.air_firmware_revision = device["firmware_revision"]
                     entity_data.air_serial_number = device["serial_number"]
                 if device["device_type"] == "SK":
                     entity_data.sky_device_id = device["device_id"]
-                    entity_data.sky_device_type=DEVICE_TYPE_SKY
+                    entity_data.sky_device_type = DEVICE_TYPE_SKY
                     entity_data.sky_hardware_revision = device["hardware_revision"]
                     entity_data.sky_firmware_revision = device["firmware_revision"]
                     entity_data.sky_serial_number = device["serial_number"]
 
             self._station_data = entity_data
 
-
     async def _read_device_data(self) -> None:
         """Update observation data."""
-
         if self._station_data.is_tempest:
             self._device_id = self._station_data.tempest_device_id
             voltage_index = 16
@@ -237,7 +236,6 @@ class WeatherFlowApiClient:
 
         return None
 
-
     async def update_forecast(self) -> None:
         """Update forecast data."""
         if self._station_data is None:
@@ -281,14 +279,14 @@ class WeatherFlowApiClient:
 
             forecast_daily = data["forecast"]["daily"]
 
-            entity_data.temp_high_today = forecast_daily[0]["air_temp_high"]          
-            entity_data.temp_low_today = forecast_daily[0]["air_temp_low"]          
+            entity_data.temp_high_today = forecast_daily[0]["air_temp_high"]
+            entity_data.temp_low_today = forecast_daily[0]["air_temp_low"]
 
             for item in forecast_daily:
                 calc_values = self.calc.day_forecast_extras(item, data["forecast"]["hourly"])
                 day_item = ForecastDailyDescription(
-                    utc_time = self.cnv.utc_from_timestamp(item["day_start_local"]),
-                    conditions = item["conditions"],
+                    utc_time=self.cnv.utc_from_timestamp(item["day_start_local"]),
+                    conditions=item["conditions"],
                     icon=item["icon"],
                     sunrise=item["sunrise"],
                     sunset=item["sunset"],
@@ -303,11 +301,11 @@ class WeatherFlowApiClient:
                 )
                 entity_data.forecast_daily.append(day_item)
 
-            forecast_hourly = data["forecast"]["hourly"]            
+            forecast_hourly = data["forecast"]["hourly"]
             for item in forecast_hourly:
                 hour_item = ForecastHourlyDescription(
-                    utc_time = self.cnv.utc_from_timestamp(item["time"]),
-                    conditions = item["conditions"],
+                    utc_time=self.cnv.utc_from_timestamp(item["time"]),
+                    conditions=item["conditions"],
                     icon=item["icon"],
                     air_temperature=self.cnv.temperature(item["air_temperature"]),
                     sea_level_pressure=self.cnv.pressure(item["sea_level_pressure"]),
@@ -322,13 +320,13 @@ class WeatherFlowApiClient:
                     feels_like=self.cnv.temperature(item["feels_like"]),
                 )
                 entity_data.forecast_hourly.append(hour_item)
-            
+
             return entity_data
 
         return None
 
     async def load_unit_system(self) -> None:
-        """Returns unit of meassurement based on unit system"""
+        """Return unit of meassurement based on unit system."""
         density_unit = "kg/m^3" if self._is_metric else "lb/ft^3"
         distance_unit = "km" if self._is_metric else "mi"
         length_unit = "m/s" if self._is_metric else "mi/h"
@@ -352,9 +350,8 @@ class WeatherFlowApiClient:
     async def _api_request(
         self,
         url: str
-        ) -> None:
+    ) -> None:
         """Get data from WeatherFlow API."""
-
         try:
             async with self.req.get(url) as resp:
                 data = await resp.json()
