@@ -1,9 +1,9 @@
-"""System Wide Constants for pyweatherflowrestapi"""
+"""System Wide Constants for pyweatherflowrestapi."""
 from __future__ import annotations
 
 DEVICE_TYPE_TEMPEST = "tempest"
 DEVICE_TYPE_AIR = "air"
-DEVICE_TYPE_SKY="sky"
+DEVICE_TYPE_SKY = "sky"
 DEVICE_TYPE_HUB = "hub"
 
 UNIT_TYPE_METRIC = "metric"

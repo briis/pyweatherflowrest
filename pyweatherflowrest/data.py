@@ -1,17 +1,15 @@
-"""Dataclasses for pyweatherflowrest"""
+"""Dataclasses for pyweatherflowrest."""
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import List
 
-   
+
 @dataclass
 class ObservationDescription:
     """A class that describes Obervation entities."""
 
     """This is the Key identifier for this entity"""
     key: int
-
 
     utc_time: str | None = None
     air_temperature: float | None = None
@@ -162,7 +160,7 @@ class ForecastDescription:
     brightness: int | None = None
     feels_like: float | None = None
     dew_point: float | None = None
-    wet_bulb_temperature:float | None = None
+    wet_bulb_temperature: float | None = None
     delta_t: float | None = None
     air_density: float | None = None
     lightning_strike_count_last_1hr: int | None = None
@@ -174,8 +172,8 @@ class ForecastDescription:
     precip_accum_local_yesterday: float | None = None
     precip_minutes_local_day: int | None = None
     precip_minutes_local_yesterday: int | None = None
-    forecast_daily: list[ForecastDailyDescription] = field(default_factory=list) 
-    forecast_hourly: list[ForecastHourlyDescription] = field(default_factory=list) 
+    forecast_daily: list[ForecastDailyDescription] = field(default_factory=list)
+    forecast_hourly: list[ForecastHourlyDescription] = field(default_factory=list)
 
 @dataclass
 class BeaufortDescription:

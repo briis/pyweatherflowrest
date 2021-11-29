@@ -86,6 +86,7 @@ class Conversions:
         """Return a UTC time from a timestamp."""
         return dt.datetime.utcfromtimestamp(timestamp).replace(tzinfo=UTC)
 
+
 class Calculations:
     """Calculate entity values."""
 

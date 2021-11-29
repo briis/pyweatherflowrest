@@ -1,6 +1,6 @@
-"""Python Wrapper for WeatherFlow REST API"""
+"""Python Wrapper for WeatherFlow REST API."""
 from pyweatherflowrest.api import WeatherFlowApiClient
-from pyweatherflowrest.exceptions import BadRequest, Invalid, NotAuthorized,  WrongStationID
+from pyweatherflowrest.exceptions import BadRequest, Invalid, NotAuthorized, WrongStationID
 
 __all__ = [
     "Invalid",
