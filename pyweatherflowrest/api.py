@@ -294,8 +294,6 @@ class WeatherFlowApiClient:
                     air_temp_low=self.cnv.temperature(item["air_temp_low"]),
                     precip=self.cnv.rain(calc_values["precip"]),
                     precip_probability=item["precip_probability"],
-                    precip_icon=item["precip_icon"],
-                    precip_type=item["precip_type"],
                     wind_avg=self.cnv.windspeed(calc_values["wind_avg"], self.homeassistant),
                     wind_direction=calc_values["wind_direction"],
                 )
