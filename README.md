@@ -25,7 +25,7 @@ The main interface for the library is the `pyweatherflowrest.WeatherFlowApiClien
 * `station_id`: (required) Supply the station id for the station you want data for.
 * `api_token`: (required) Enter your personal api token for the above station id. You can get your *Personal Use Token* [by going here](https://tempestwx.com/settings/tokens) and login with your credentials. Then click CREATE TOKEN in the upper right corner.
 * `units`: (optional) Valid options here are *metric* or *imperial*. WeatherFlow stations always deliver data in metric units, so conversion will only take place if if metric is not selected. Default value is **metric**
-* `homeassistant`: (optional) Valid options are *True* or *False*. If set to True, there will be some unit types that will not be converted, as Home Assistant will take care of that. Default value is **True**
+* `homeassistant`: (optional) Valid options are *True* or *False*. If set to True, there will be some unit types that will not be converted, as Home Assistant will take care of that. Default value is **False**
 
 ```python
 import asyncio

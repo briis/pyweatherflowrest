@@ -41,7 +41,7 @@ class WeatherFlowApiClient:
         station_id: int,
         api_token: str,
         units: Optional[str] = UNIT_TYPE_METRIC,
-        homeassistant: Optional(bool) = True,
+        homeassistant: Optional(bool) = False,
         session: Optional[aiohttp.ClientSession] = None,
     ) -> None:
         """Initialize Api Class."""

@@ -1,3 +1,4 @@
+"""Demo Program."""
 import asyncio
 import logging
 import time
@@ -9,10 +10,17 @@ from pyweatherflowrest.exceptions import WrongStationID, Invalid, NotAuthorized,
 _LOGGER = logging.getLogger(__name__)
 
 async def main() -> None:
+    """Start the demo program."""
     logging.basicConfig(level=logging.DEBUG)
     start = time.time()
 
-    weatherflow = WeatherFlowApiClient(51146, "20c70eae-e62f-4d3b-b3a4-8586e90f3ac8", units="metric", homeassistant=False)
+    weatherflow = WeatherFlowApiClient(
+        51146,
+        "20c70eae-e62f-4d3b-b3a4-8586e90f3ac8",
+        units="metric",
+        homeassistant=False
+    )
+
     try:
         await weatherflow.initialize()
 
@@ -38,8 +46,7 @@ async def main() -> None:
     if data is not None:
         for field in data.__dataclass_fields__:
             value = getattr(data, field)
-            print(field,"-", value)
-
+            print(field, "-", value)
 
     data: ForecastDescription = await weatherflow.update_forecast()
     if data is not None:
@@ -48,13 +55,19 @@ async def main() -> None:
             if field == "forecast_daily":
                 # continue
                 for item in value:
-                    print(item.utc_time, item.conditions, item.air_temp_high, item.precip, item.wind_avg, item.wind_direction)
+                    print(
+                        item.utc_time,
+                        item.conditions,
+                        item.air_temp_high,
+                        item.precip, item.wind_avg,
+                        item.wind_direction
+                    )
             elif field == "forecast_hourly":
                 continue
                 for item in value:
                     print(item.conditions, item.air_temperature)
             else:
-                print(field,"-", value)
+                print(field, "-", value)
 
     end = time.time()
 
