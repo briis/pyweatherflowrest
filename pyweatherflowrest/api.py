@@ -149,7 +149,9 @@ class WeatherFlowApiClient:
             if data is not None:
                 device = data["obs"][0]
                 self._observation_data.voltage_tempest = device[voltage_index]
-                self._observation_data.battery_tempest = self.calc.battery_percent(self._station_data.is_tempest, device[voltage_index])
+                self._observation_data.battery_tempest = self.calc.battery_percent(
+                    self._station_data.is_tempest, device[voltage_index]
+                )
         else:
             self._device_id = self._station_data.air_device_id
             voltage_index = 6
@@ -157,7 +159,9 @@ class WeatherFlowApiClient:
             if data is not None:
                 device = data["obs"][0]
                 self._observation_data.voltage_air = device[voltage_index]
-                self._observation_data.battery_air = self.calc.battery_percent(self._station_data.is_tempest, device[voltage_index])
+                self._observation_data.battery_air = self.calc.battery_percent(
+                    self._station_data.is_tempest, device[voltage_index]
+                )
 
             self._device_id = self._station_data.sky_device_id
             voltage_index = 8
@@ -165,7 +169,9 @@ class WeatherFlowApiClient:
             if data is not None:
                 device = data["obs"][0]
                 self._observation_data.voltage_sky = device[voltage_index]
-                self._observation_data.battery_sky = self.calc.battery_percent(self._station_data.is_tempest, device[voltage_index])
+                self._observation_data.battery_sky = self.calc.battery_percent(
+                    self._station_data.is_tempest, device[voltage_index]
+                )
 
     async def update_observations(self) -> None:
         """Update observation data."""
@@ -209,8 +215,12 @@ class WeatherFlowApiClient:
                 uv=obervations["uv"],
                 uv_description=self.calc.uv_description(obervations["uv"]),
                 brightness=obervations["brightness"],
-                lightning_strike_last_epoch=self.cnv.utc_from_timestamp(obervations["lightning_strike_last_epoch"]),
-                lightning_strike_last_distance=self.cnv.distance(obervations["lightning_strike_last_distance"]),
+                lightning_strike_last_epoch=self.cnv.utc_from_timestamp(
+                    obervations["lightning_strike_last_epoch"]
+                ),
+                lightning_strike_last_distance=self.cnv.distance(
+                    obervations["lightning_strike_last_distance"]
+                ),
                 lightning_strike_count=obervations["lightning_strike_count"],
                 lightning_strike_count_last_1hr=obervations["lightning_strike_count_last_1hr"],
                 lightning_strike_count_last_3hr=obervations["lightning_strike_count_last_3hr"],
@@ -225,7 +235,9 @@ class WeatherFlowApiClient:
                 is_raining=self.calc.is_raining(obervations["precip"]),
                 is_freezing=self.calc.is_freezing(obervations["air_temperature"]),
                 visibility=self.cnv.distance(visibility),
-                absolute_humidity=self.calc.absolute_humidity(obervations["air_temperature"], obervations["relative_humidity"]),
+                absolute_humidity=self.calc.absolute_humidity(
+                    obervations["air_temperature"], obervations["relative_humidity"]
+                ),
                 beaufort=beaufort.value,
                 beaufort_description=beaufort.description,
             )
@@ -270,7 +282,9 @@ class WeatherFlowApiClient:
                 lightning_strike_count_last_3hr=current["lightning_strike_count_last_3hr"],
                 lightning_strike_last_distance=current["lightning_strike_last_distance"],
                 lightning_strike_last_distance_msg=current["lightning_strike_last_distance_msg"],
-                lightning_strike_last_epoch=self.cnv.utc_from_timestamp(current["lightning_strike_last_epoch"]),
+                lightning_strike_last_epoch=self.cnv.utc_from_timestamp(
+                    current["lightning_strike_last_epoch"]
+                ),
                 precip_accum_local_day=self.cnv.rain(current["precip_accum_local_day"]),
                 precip_accum_local_yesterday=self.cnv.rain(current["precip_accum_local_yesterday"]),
                 precip_minutes_local_day=current["precip_minutes_local_day"],
