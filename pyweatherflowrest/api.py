@@ -188,7 +188,7 @@ class WeatherFlowApiClient:
                 obervations["relative_humidity"],
                 obervations["dew_point"]
             )
-            beaufort: BeaufortDescription = self.calc.beaufort(obervations["wind_avg"])
+            beaufort: BeaufortDescription = self.calc.beaufort_value(obervations["wind_avg"])
 
             entity_data = ObservationDescription(
                 key=self.station_id,

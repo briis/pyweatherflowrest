@@ -219,78 +219,27 @@ class Calculations:
         ]
         return direction_array[int((wind_bearing + 11.25) / 22.5)]
 
-    def beaufort(self, wind_speed: float) -> BeaufortDescription:
-        """Retruns data structure with Beaufort values."""
-        if wind_speed is None:
-            return None
-
-        if wind_speed > 32.7:
-            bft = BeaufortDescription(
-                value=12,
-                description="hurricane"
-            )
-        elif wind_speed >= 28.5:
-            bft = BeaufortDescription(
-                value=11,
-                description="violent_storm"
-            )
-        elif wind_speed >= 24.5:
-            bft = BeaufortDescription(
-                value=10,
-                description="storm"
-            )
-        elif wind_speed >= 20.8:
-            bft = BeaufortDescription(
-                value=9,
-                description="strong_gale"
-            )
-        elif wind_speed >= 17.2:
-            bft = BeaufortDescription(
-                value=8,
-                description="fresh_gale"
-            )
-        elif wind_speed >= 13.9:
-            bft = BeaufortDescription(
-                value=7,
-                description="moderate_gale"
-            )
-        elif wind_speed >= 10.8:
-            bft = BeaufortDescription(
-                value=6,
-                description="strong_breeze"
-            )
-        elif wind_speed >= 8.0:
-            bft = BeaufortDescription(
-                value=5,
-                description="fresh_breeze"
-            )
-        elif wind_speed >= 5.5:
-            bft = BeaufortDescription(
-                value=4,
-                description="moderate_breeze"
-            )
-        elif wind_speed >= 3.4:
-            bft = BeaufortDescription(
-                value=3,
-                description="gentle_breeze"
-            )
-        elif wind_speed >= 1.6:
-            bft = BeaufortDescription(
-                value=2,
-                description="light_breeze"
-            )
-        elif wind_speed >= 0.3:
-            bft = BeaufortDescription(
-                value=1,
-                description="light_air"
-            )
-        else:
-            bft = BeaufortDescription(
-                value=0,
-                description="calm"
-            )
-
-        return bft
+    def beaufort_value(self, wind_speed: float) -> BeaufortDescription:
+        """Return Beaufort Value and Description."""
+        mapping_text = {
+            "32.7": [12, "hurricane"],
+            "28.5": [11, "violent_storm"],
+            "24.5": [10, "storm"],
+            "20.8": [9, "strong_gale"],
+            "17.2": [8, "fresh_gale"],
+            "13.9": [7, "moderate_gale"],
+            "10.8": [6, "strong_breeze"],
+            "8.0": [5, "fresh_breeze"],
+            "5.5": [4, "moderate_breeze"],
+            "3.4": [3, "gentle_breeze"],
+            "1.6": [2, "light_breeze"],
+            "0.3": [1, "light_air"],
+            "-1": [0, "calm"],
+        }
+        for k, v in mapping_text.items():
+            if wind_speed > float(k):
+                return BeaufortDescription(value=v[0], description=v[1])
+        return None
 
     def precip_intensity(self, precip: float) -> str:
         """Return text string with WeatherFlow Precip Intensity."""
