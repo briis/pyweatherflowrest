@@ -31,6 +31,12 @@ class ObservationDescription:
     wind_cardinal: str | None = None
     wind_gust: float | None = None
     wind_lull: float | None = None
+    wind_avg_kmh: float | None = None
+    wind_gust_kmh: float | None = None
+    wind_lull_kmh: float | None = None
+    wind_avg_knots: float | None = None
+    wind_gust_knots: float | None = None
+    wind_lull_knots: float | None = None
     beaufort: int | None = None
     beaufort_description: str | None = None
     solar_radiation: float | None = None
@@ -59,6 +65,7 @@ class ObservationDescription:
     battery_tempest: float | None = None
     is_freezing: bool | None = None
     is_raining: bool | None = None
+    is_lightning: bool | None = None
 
 
 @dataclass

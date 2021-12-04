@@ -82,6 +82,20 @@ class Conversions:
 
         return round(value * 2.236936292, 1)
 
+    def windspeed_knots(self, value: float) -> float:
+        """Return knots from m/s."""
+        if value is None:
+            return value
+
+        return round(value * 1.943844, 1)
+
+    def windspeed_kmh(self, value: float) -> float:
+        """Return km/h from m/s."""
+        if value is None:
+            return value
+
+        return round(value * 3.6, 1)
+
     def utc_from_timestamp(self, timestamp: int) -> dt.datetime:
         """Return a UTC time from a timestamp."""
         return dt.datetime.utcfromtimestamp(timestamp).replace(tzinfo=UTC)
@@ -103,6 +117,12 @@ class Calculations:
         if temperature is None:
             return None
         return temperature < 0
+
+    def is_lightning(self, count):
+        """Return true if Lightning Count larger than 0."""
+        if count is None:
+            return False
+        return count > 0
 
     def day_forecast_extras(self, day_data, hour_data) -> float:
         """Return accumulated precip for the day."""
