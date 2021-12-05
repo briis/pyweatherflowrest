@@ -98,6 +98,8 @@ class Conversions:
 
     def utc_from_timestamp(self, timestamp: int) -> dt.datetime:
         """Return a UTC time from a timestamp."""
+        if timestamp is None:
+            return None
         return dt.datetime.utcfromtimestamp(timestamp).replace(tzinfo=UTC)
 
 
@@ -139,7 +141,11 @@ class Calculations:
         _sum_wind_avg = sum(_wind_avg) / len(_wind_avg)
         _sum_wind_bearing = sum(_wind_bearing) / len(_wind_bearing)
 
-        return {"precip": round(_precip, 1), "wind_avg": round(_sum_wind_avg, 1), "wind_direction": int(_sum_wind_bearing)}
+        return {
+            "precip": round(_precip, 1),
+            "wind_avg": round(_sum_wind_avg, 1),
+            "wind_direction": int(_sum_wind_bearing)
+        }
 
     def visibility(self, elevation, air_temperature, relative_humidity, dewpoint) -> float:
         """Return the calculated visibility."""

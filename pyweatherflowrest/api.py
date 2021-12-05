@@ -305,20 +305,21 @@ class WeatherFlowApiClient:
 
             for item in forecast_daily:
                 calc_values = self.calc.day_forecast_extras(item, data["forecast"]["hourly"])
-                day_item = ForecastDailyDescription(
-                    utc_time=self.cnv.utc_from_timestamp(item["day_start_local"]),
-                    conditions=item["conditions"],
-                    icon=item["icon"],
-                    sunrise=item["sunrise"],
-                    sunset=item["sunset"],
-                    air_temp_high=self.cnv.temperature(item["air_temp_high"]),
-                    air_temp_low=self.cnv.temperature(item["air_temp_low"]),
-                    precip=self.cnv.rain(calc_values["precip"]),
-                    precip_probability=item["precip_probability"],
-                    wind_avg=self.cnv.windspeed(calc_values["wind_avg"], self.homeassistant),
-                    wind_direction=calc_values["wind_direction"],
-                )
-                entity_data.forecast_daily.append(day_item)
+                if calc_values is not None:
+                    day_item = ForecastDailyDescription(
+                        utc_time=self.cnv.utc_from_timestamp(item["day_start_local"]),
+                        conditions=item["conditions"],
+                        icon=item["icon"],
+                        sunrise=item["sunrise"],
+                        sunset=item["sunset"],
+                        air_temp_high=self.cnv.temperature(item["air_temp_high"]),
+                        air_temp_low=self.cnv.temperature(item["air_temp_low"]),
+                        precip=self.cnv.rain(calc_values["precip"]),
+                        precip_probability=item["precip_probability"],
+                        wind_avg=self.cnv.windspeed(calc_values["wind_avg"], self.homeassistant),
+                        wind_direction=calc_values["wind_direction"],
+                    )
+                    entity_data.forecast_daily.append(day_item)
 
             forecast_hourly = data["forecast"]["hourly"]
             for item in forecast_hourly:
