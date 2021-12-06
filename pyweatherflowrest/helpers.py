@@ -247,6 +247,9 @@ class Calculations:
 
     def beaufort_value(self, wind_speed: float) -> BeaufortDescription:
         """Return Beaufort Value and Description."""
+        if wind_speed is None:
+            return BeaufortDescription(value=0, description="None")
+
         mapping_text = {
             "32.7": [12, "hurricane"],
             "28.5": [11, "violent_storm"],

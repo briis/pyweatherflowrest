@@ -17,7 +17,7 @@ async def main() -> None:
     weatherflow = WeatherFlowApiClient(
         63146,
         "20c70eae-e62f-4d3b-b3a4-8586e90f3ac8",
-        units="metric",
+        units="imperial",
         homeassistant=False
     )
 
@@ -58,7 +58,10 @@ async def main() -> None:
                     print(
                         item.utc_time,
                         item.conditions,
+                        "Temp High: ",
                         item.air_temp_high,
+                        "Temp Low: ",
+                        item.air_temp_low,
                         item.precip, item.wind_avg,
                         item.wind_direction
                     )
