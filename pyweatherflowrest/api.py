@@ -353,6 +353,7 @@ class WeatherFlowApiClient:
         length_km_unit = "km/h" if self._is_metric else "mph"
         pressure_unit = "hPa" if self._is_metric else "inHg"
         precip_unit = "mm" if self._is_metric else "in"
+        temp_unit = "°C" if self._is_metric else "°F"
 
         units_list: dict = {
             "none": None,
@@ -363,6 +364,7 @@ class WeatherFlowApiClient:
             "pressure": pressure_unit,
             "precipitation": precip_unit,
             "precipitation_rate": f"{precip_unit}/h",
+            "temperature": temp_unit,
         }
 
         return units_list
