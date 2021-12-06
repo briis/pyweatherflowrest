@@ -30,7 +30,7 @@ class Conversions:
         """Return inHg from mb/hPa."""
         if value is None or self.units == UNIT_TYPE_METRIC:
             return value
-        return round(value * 0.029530, 1)
+        return round(value * 0.029530, 3)
 
     def rain(self, value) -> float:
         """Convert rain units."""
