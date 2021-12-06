@@ -4,7 +4,7 @@
 
 This module communicates with a WeatherFlow Weather Station using a [their REST API](https://weatherflow.github.io/Tempest/api/swagger/#/).
 
-The module is primarily written for the purpose of being used in Home Assistant for the Custom Integration called `weatherflow` but might be used for other purposes also.
+The module is primarily written for the purpose of being used in Home Assistant for the Custom Integration called [`weatherflow`](https://github.com/briis/hass-weatherflow) but might be used for other purposes also.
 
 When this is done, it will replace the previous module [`pysmartweatherio`](https://github.com/briis/pysmartweatherio)
 
