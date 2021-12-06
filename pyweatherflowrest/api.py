@@ -349,8 +349,8 @@ class WeatherFlowApiClient:
         """Return unit of meassurement based on unit system."""
         density_unit = "kg/m^3" if self._is_metric else "lb/ft^3"
         distance_unit = "km" if self._is_metric else "mi"
-        length_unit = "m/s" if self._is_metric else "mi/h"
-        length_km_unit = "km/h" if self._is_metric else "mi/h"
+        length_unit = "m/s" if self._is_metric else "mph"
+        length_km_unit = "km/h" if self._is_metric else "mph"
         pressure_unit = "hPa" if self._is_metric else "inHg"
         precip_unit = "mm" if self._is_metric else "in"
 
