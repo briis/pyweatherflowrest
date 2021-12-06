@@ -236,7 +236,7 @@ class WeatherFlowApiClient:
                 dew_point=self.cnv.temperature(obervations.get("dew_point")),
                 wet_bulb_temperature=self.cnv.temperature(obervations.get("wet_bulb_temperature")),
                 delta_t=obervations.get("delta_t"),
-                air_density=obervations.get("air_density"),
+                air_density=self.cnv.density(obervations.get("air_density")),
                 pressure_trend=obervations.get("pressure_trend"),
                 is_raining=self.calc.is_raining(obervations.get("precip")),
                 is_freezing=self.calc.is_freezing(obervations.get("air_temperature")),
