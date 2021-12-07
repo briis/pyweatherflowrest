@@ -2,7 +2,14 @@
 
 This document will contain a list of all major changes.
 
-## [0.1.15] - Unreleased
+## [0.1.16] - Unreleased
+
+### Changes
+
+- Air Density values are now round to 5 decimals.
+
+
+## [0.1.15] - 2021-12-07
 
 ### Changes
 

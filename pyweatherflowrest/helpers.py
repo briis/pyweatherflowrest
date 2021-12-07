@@ -56,9 +56,9 @@ class Conversions:
             return None
 
         if self.units == UNIT_TYPE_METRIC:
-            return round(value, 1)
+            return round(value, 5)
 
-        return round(value * 0.06243, 1)
+        return round(value * 0.06243, 5)
 
     def distance(self, value) -> float:
         """Conerts km to mi."""
