@@ -12,3 +12,4 @@ This document will contain a list of all major changes.
 
 - Added missing density conversion
 - If no wind_avg values present, the beaufort conversion function would fail. Now it will return empty values.
+
