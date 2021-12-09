@@ -218,7 +218,7 @@ class WeatherFlowApiClient:
                 wind_lull_kmh=self.cnv.windspeed_kmh(obervations.get("wind_lull")),
                 wind_lull_knots=self.cnv.windspeed_knots(obervations.get("wind_lull")),
                 solar_radiation=obervations.get("solar_radiation"),
-                uv=obervations.get("uv"),
+                uv=self.cnv.uv_index(obervations.get("uv")),
                 uv_description=self.calc.uv_description(obervations.get("uv")),
                 brightness=obervations.get("brightness"),
                 lightning_strike_last_epoch=self.cnv.utc_from_timestamp(

@@ -102,6 +102,13 @@ class Conversions:
             return None
         return dt.datetime.utcfromtimestamp(timestamp).replace(tzinfo=UTC)
 
+    def uv_index(self, uvi: float) -> float:
+        """Return rounded UV Index."""
+        if uvi is None:
+            return None
+        return round(uvi, 1)
+        
+
 
 class Calculations:
     """Calculate entity values."""
