@@ -2,11 +2,12 @@
 
 This document will contain a list of all major changes.
 
-## [0.1.7] - Unreleased
+## [0.1.17] - 2021-12-09
 
 ### Changes
 
 - UV Index values are now rounded to 1 decimal.
+- Added battery mode and battery mode description. This only applies to Tempest devices.
 
 ## [0.1.16] - 2021-12-09
 
