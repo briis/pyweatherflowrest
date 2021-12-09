@@ -2,6 +2,12 @@
 
 This document will contain a list of all major changes.
 
+## [0.1.7] - Unreleased
+
+### Changes
+
+- UV Index values are now rounded to 1 decimal.
+
 ## [0.1.16] - 2021-12-09
 
 ### Changes
