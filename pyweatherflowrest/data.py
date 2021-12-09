@@ -63,6 +63,8 @@ class ObservationDescription:
     battery_sky: float | None = None
     voltage_tempest: float | None = None
     battery_tempest: float | None = None
+    battery_mode: float | None = None
+    battery_mode_description: str | None = None
     is_freezing: bool | None = None
     is_raining: bool | None = None
     is_lightning: bool | None = None

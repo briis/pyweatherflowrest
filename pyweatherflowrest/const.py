@@ -1,6 +1,13 @@
 """System Wide Constants for pyweatherflowrestapi."""
 from __future__ import annotations
 
+BATTERY_MODE_DESCRIPTION = [
+    "All sensors enabled and operating at full performance. Wind sampling interval every 3 seconds",
+    "Wind sampling interval set to 6 seconds",
+    "Wind sampling interval set to one minute",
+    "Wind sampling interval set to 5 minutes. All other sensors sampling interval set to 5 minutes. Haptic Rain sensor disabled from active listening",
+]
+
 DEVICE_TYPE_TEMPEST = "tempest"
 DEVICE_TYPE_AIR = "air"
 DEVICE_TYPE_SKY = "sky"

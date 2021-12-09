@@ -182,13 +182,13 @@ class WeatherFlowApiClient:
         if data is not None:
             obervations: dict = data['obs'][0]
 
+            beaufort_data: BeaufortDescription = self.calc.beaufort_value(obervations.get("wind_avg"))
             visibility = self.calc.visibility(
                 self._station_data.elevation,
                 obervations["air_temperature"],
                 obervations["relative_humidity"],
                 obervations["dew_point"]
             )
-            beaufort_data: BeaufortDescription = self.calc.beaufort_value(obervations.get("wind_avg"))
 
             entity_data = ObservationDescription(
                 key=self.station_id,
@@ -248,8 +248,18 @@ class WeatherFlowApiClient:
                 beaufort=beaufort_data.value,
                 beaufort_description=beaufort_data.description,
             )
+
             self._observation_data = entity_data
             await self._read_device_data()
+
+            # Update Tempest Specific Data
+            if self._station_data.is_tempest:
+                battery_mode, battery_mode_description = self.calc.battery_mode(
+                    self._observation_data.voltage_tempest,
+                    obervations.get("solar_radiation")
+                )
+                entity_data.battery_mode = battery_mode
+                entity_data.battery_mode_description = battery_mode_description
 
             return self._observation_data
 

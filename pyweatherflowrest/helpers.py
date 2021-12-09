@@ -5,7 +5,7 @@ import datetime as dt
 import logging
 import math
 
-from pyweatherflowrest.const import UNIT_TYPE_METRIC
+from pyweatherflowrest.const import BATTERY_MODE_DESCRIPTION, UNIT_TYPE_METRIC
 from pyweatherflowrest.data import BeaufortDescription
 
 UTC = dt.timezone.utc
@@ -300,3 +300,54 @@ class Calculations:
             intensity = "extreme"
 
         return intensity
+
+    def battery_mode(self, voltage, solar_radiation):
+        """Return battery operating mode.
+
+        Input:
+            Voltage in Volts DC (depends on the weather station type, see below)
+            is_tempest in Boolean
+            solar_radiation in W/M^2 (used to determine if battery is in a charging state)
+        Tempest:
+            # data["battery_level"] = cnv.battery_mode(obs[16], True, obs[11])
+            # https://help.weatherflow.com/hc/en-us/articles/360048877194-Solar-Power-Rechargeable-Battery
+        AIR & SKY:
+            The battery mode does not apply to AIR & SKY Units
+        """
+        if voltage is None or solar_radiation is None:
+            return None
+
+        if voltage >= 2.455:
+            # Mode 0 (independent of charging or discharging at this voltage)
+            batt_mode = int(0)
+        elif voltage <= 2.355:
+            # Mode 3 (independent of charging or discharging at this voltage)
+            batt_mode = int(3)
+        elif solar_radiation > 100:
+            # Assume charging and voltage is raising
+            if voltage >= 2.41:
+                # Mode 1
+                batt_mode = int(1)
+            elif voltage > 2.375:
+                # Mode 2
+                batt_mode = int(2)
+            else:
+                # Mode 3
+                batt_mode = int(3)
+        else:
+            # Assume discharging and voltage is lowering
+            if voltage > 2.415:
+                # Mode 0
+                batt_mode = int(0)
+            elif voltage > 2.39:
+                # Mode 1
+                batt_mode = int(1)
+            elif voltage > 2.355:
+                # Mode 2
+                batt_mode = int(2)
+            else:
+                # Mode 3
+                batt_mode = int(3)
+
+        mode_description = BATTERY_MODE_DESCRIPTION[batt_mode]
+        return batt_mode, mode_description
