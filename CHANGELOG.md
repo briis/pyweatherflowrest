@@ -2,7 +2,7 @@
 
 This document will contain a list of all major changes.
 
-## [0.1.16] - Unreleased
+## [0.1.16] - 2021-12-09
 
 ### Changes
 
