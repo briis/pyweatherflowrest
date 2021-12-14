@@ -179,89 +179,95 @@ class WeatherFlowApiClient:
             return
 
         data = await self._api_request(self.observation_url)
-        if data is not None:
-            obervations: dict = data['obs'][0]
+        try:
+            if data is not None:
+                obervations: dict = data['obs'][0]
 
-            beaufort_data: BeaufortDescription = self.calc.beaufort_value(obervations.get("wind_avg"))
-            visibility = self.calc.visibility(
-                self._station_data.elevation,
-                obervations["air_temperature"],
-                obervations["relative_humidity"],
-                obervations["dew_point"]
-            )
-
-            entity_data = ObservationDescription(
-                key=self.station_id,
-                utc_time=self.cnv.utc_from_timestamp(obervations.get("timestamp")),
-                air_temperature=self.cnv.temperature(obervations.get("air_temperature")),
-                barometric_pressure=self.cnv.pressure(obervations.get("barometric_pressure")),
-                station_pressure=self.cnv.pressure(obervations.get("station_pressure")),
-                sea_level_pressure=self.cnv.pressure(obervations.get("sea_level_pressure")),
-                relative_humidity=obervations.get("relative_humidity"),
-                precip=self.cnv.rain(obervations.get("precip")),
-                precip_rate=self.cnv.rain_rate(obervations.get("precip")),
-                precip_intensity=self.calc.precip_intensity(obervations.get("precip")),
-                precip_accum_last_1hr=self.cnv.rain(obervations.get("precip_accum_last_1hr")),
-                precip_accum_local_day=self.cnv.rain(obervations.get("precip_accum_local_day")),
-                precip_accum_local_yesterday=self.cnv.rain(obervations.get("precip_accum_local_yesterday")),
-                precip_minutes_local_day=obervations.get("precip_minutes_local_day"),
-                precip_minutes_local_yesterday=obervations.get("precip_minutes_local_yesterday"),
-                wind_avg=self.cnv.windspeed(obervations.get("wind_avg")),
-                wind_avg_kmh=self.cnv.windspeed_kmh(obervations.get("wind_avg")),
-                wind_avg_knots=self.cnv.windspeed_knots(obervations.get("wind_avg")),
-                wind_direction=obervations.get("wind_direction"),
-                wind_cardinal=self.calc.wind_direction(obervations.get("wind_direction")),
-                wind_gust=self.cnv.windspeed(obervations.get("wind_gust")),
-                wind_gust_kmh=self.cnv.windspeed_kmh(obervations.get("wind_gust")),
-                wind_gust_knots=self.cnv.windspeed_knots(obervations.get("wind_gust")),
-                wind_lull=self.cnv.windspeed(obervations.get("wind_lull")),
-                wind_lull_kmh=self.cnv.windspeed_kmh(obervations.get("wind_lull")),
-                wind_lull_knots=self.cnv.windspeed_knots(obervations.get("wind_lull")),
-                solar_radiation=obervations.get("solar_radiation"),
-                uv=self.cnv.uv_index(obervations.get("uv")),
-                uv_description=self.calc.uv_description(obervations.get("uv")),
-                brightness=obervations.get("brightness"),
-                lightning_strike_last_epoch=self.cnv.utc_from_timestamp(
-                    obervations.get("lightning_strike_last_epoch")
-                ),
-                lightning_strike_last_distance=self.cnv.distance(
-                    obervations.get("lightning_strike_last_distance")
-                ),
-                lightning_strike_count=obervations.get("lightning_strike_count"),
-                lightning_strike_count_last_1hr=obervations.get("lightning_strike_count_last_1hr"),
-                lightning_strike_count_last_3hr=obervations.get("lightning_strike_count_last_3hr"),
-                feels_like=self.cnv.temperature(obervations.get("feels_like")),
-                heat_index=self.cnv.temperature(obervations.get("heat_index")),
-                wind_chill=self.cnv.temperature(obervations.get("wind_chill")),
-                dew_point=self.cnv.temperature(obervations.get("dew_point")),
-                wet_bulb_temperature=self.cnv.temperature(obervations.get("wet_bulb_temperature")),
-                delta_t=obervations.get("delta_t"),
-                air_density=self.cnv.density(obervations.get("air_density")),
-                pressure_trend=obervations.get("pressure_trend"),
-                is_raining=self.calc.is_raining(obervations.get("precip")),
-                is_freezing=self.calc.is_freezing(obervations.get("air_temperature")),
-                is_lightning=self.calc.is_lightning(obervations.get("lightning_strike_count")),
-                visibility=self.cnv.distance(visibility),
-                absolute_humidity=self.calc.absolute_humidity(
-                    obervations.get("air_temperature"), obervations.get("relative_humidity")
-                ),
-                beaufort=beaufort_data.value,
-                beaufort_description=beaufort_data.description,
-            )
-
-            self._observation_data = entity_data
-            await self._read_device_data()
-
-            # Update Tempest Specific Data
-            if self._station_data.is_tempest:
-                battery_mode, battery_mode_description = self.calc.battery_mode(
-                    self._observation_data.voltage_tempest,
-                    obervations.get("solar_radiation")
+                beaufort_data: BeaufortDescription = self.calc.beaufort_value(obervations.get("wind_avg"))
+                visibility = self.calc.visibility(
+                    self._station_data.elevation,
+                    obervations["air_temperature"],
+                    obervations["relative_humidity"],
+                    obervations["dew_point"]
                 )
-                entity_data.battery_mode = battery_mode
-                entity_data.battery_mode_description = battery_mode_description
 
-            return self._observation_data
+                entity_data = ObservationDescription(
+                    key=self.station_id,
+                    utc_time=self.cnv.utc_from_timestamp(obervations.get("timestamp")),
+                    air_temperature=self.cnv.temperature(obervations.get("air_temperature")),
+                    barometric_pressure=self.cnv.pressure(obervations.get("barometric_pressure")),
+                    station_pressure=self.cnv.pressure(obervations.get("station_pressure")),
+                    sea_level_pressure=self.cnv.pressure(obervations.get("sea_level_pressure")),
+                    relative_humidity=obervations.get("relative_humidity"),
+                    precip=self.cnv.rain(obervations.get("precip")),
+                    precip_rate=self.cnv.rain_rate(obervations.get("precip")),
+                    precip_intensity=self.calc.precip_intensity(obervations.get("precip")),
+                    precip_accum_last_1hr=self.cnv.rain(obervations.get("precip_accum_last_1hr")),
+                    precip_accum_local_day=self.cnv.rain(obervations.get("precip_accum_local_day")),
+                    precip_accum_local_yesterday=self.cnv.rain(obervations.get("precip_accum_local_yesterday")),
+                    precip_minutes_local_day=obervations.get("precip_minutes_local_day"),
+                    precip_minutes_local_yesterday=obervations.get("precip_minutes_local_yesterday"),
+                    wind_avg=self.cnv.windspeed(obervations.get("wind_avg")),
+                    wind_avg_kmh=self.cnv.windspeed_kmh(obervations.get("wind_avg")),
+                    wind_avg_knots=self.cnv.windspeed_knots(obervations.get("wind_avg")),
+                    wind_direction=obervations.get("wind_direction"),
+                    wind_cardinal=self.calc.wind_direction(obervations.get("wind_direction")),
+                    wind_gust=self.cnv.windspeed(obervations.get("wind_gust")),
+                    wind_gust_kmh=self.cnv.windspeed_kmh(obervations.get("wind_gust")),
+                    wind_gust_knots=self.cnv.windspeed_knots(obervations.get("wind_gust")),
+                    wind_lull=self.cnv.windspeed(obervations.get("wind_lull")),
+                    wind_lull_kmh=self.cnv.windspeed_kmh(obervations.get("wind_lull")),
+                    wind_lull_knots=self.cnv.windspeed_knots(obervations.get("wind_lull")),
+                    solar_radiation=obervations.get("solar_radiation"),
+                    uv=self.cnv.uv_index(obervations.get("uv")),
+                    uv_description=self.calc.uv_description(obervations.get("uv")),
+                    brightness=obervations.get("brightness"),
+                    lightning_strike_last_epoch=self.cnv.utc_from_timestamp(
+                        obervations.get("lightning_strike_last_epoch")
+                    ),
+                    lightning_strike_last_distance=self.cnv.distance(
+                        obervations.get("lightning_strike_last_distance")
+                    ),
+                    lightning_strike_count=obervations.get("lightning_strike_count"),
+                    lightning_strike_count_last_1hr=obervations.get("lightning_strike_count_last_1hr"),
+                    lightning_strike_count_last_3hr=obervations.get("lightning_strike_count_last_3hr"),
+                    feels_like=self.cnv.temperature(obervations.get("feels_like")),
+                    heat_index=self.cnv.temperature(obervations.get("heat_index")),
+                    wind_chill=self.cnv.temperature(obervations.get("wind_chill")),
+                    dew_point=self.cnv.temperature(obervations.get("dew_point")),
+                    wet_bulb_temperature=self.cnv.temperature(obervations.get("wet_bulb_temperature")),
+                    delta_t=obervations.get("delta_t"),
+                    air_density=self.cnv.density(obervations.get("air_density")),
+                    pressure_trend=obervations.get("pressure_trend"),
+                    is_raining=self.calc.is_raining(obervations.get("precip")),
+                    is_freezing=self.calc.is_freezing(obervations.get("air_temperature")),
+                    is_lightning=self.calc.is_lightning(obervations.get("lightning_strike_count")),
+                    visibility=self.cnv.distance(visibility),
+                    absolute_humidity=self.calc.absolute_humidity(
+                        obervations.get("air_temperature"), obervations.get("relative_humidity")
+                    ),
+                    beaufort=beaufort_data.value,
+                    beaufort_description=beaufort_data.description,
+                )
+
+                self._observation_data = entity_data
+                await self._read_device_data()
+
+                # Update Tempest Specific Data
+                if self._station_data.is_tempest:
+                    battery_mode, battery_mode_description = self.calc.battery_mode(
+                        self._observation_data.voltage_tempest,
+                        obervations.get("solar_radiation")
+                    )
+                    entity_data.battery_mode = battery_mode
+                    entity_data.battery_mode_description = battery_mode_description
+
+                return self._observation_data
+        except IndexError as err:
+            error_message = f"Error occured processing data. Error message: {err}"
+            if "list index out of range" in err:
+                error_message = "Empty dataset returned from WeatherFlow. Make sure the station is online."
+            raise Invalid(error_message) from None
 
         return None
 
