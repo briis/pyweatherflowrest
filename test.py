@@ -7,6 +7,10 @@ from pyweatherflowrest.api import WeatherFlowApiClient
 from pyweatherflowrest.data import ObservationDescription, StationDescription, ForecastDescription, ForecastDailyDescription
 from pyweatherflowrest.exceptions import WrongStationID, Invalid, NotAuthorized, BadRequest
 
+"""
+    Station ID's
+    32725
+"""
 _LOGGER = logging.getLogger(__name__)
 
 async def main() -> None:
@@ -15,7 +19,7 @@ async def main() -> None:
     start = time.time()
 
     weatherflow = WeatherFlowApiClient(
-        32725,
+        51146,
         "20c70eae-e62f-4d3b-b3a4-8586e90f3ac8",
         units="imperial",
         homeassistant=False
@@ -42,38 +46,44 @@ async def main() -> None:
             value = getattr(data, field)
             print(field,"-", value)
 
-    data: ObservationDescription = await weatherflow.update_observations()
-    if data is not None:
-        for field in data.__dataclass_fields__:
-            value = getattr(data, field)
-            print(field, "-", value)
-
-    data: ForecastDescription = await weatherflow.update_forecast()
-    if data is not None:
-        for field in data.__dataclass_fields__:
-            value = getattr(data, field)
-            if field == "forecast_daily":
-                # continue
-                for item in value:
-                    print(
-                        item.utc_time,
-                        item.conditions,
-                        "Temp High: ",
-                        item.air_temp_high,
-                        "Temp Low: ",
-                        item.air_temp_low,
-                        item.precip, item.wind_avg,
-                        item.wind_direction
-                    )
-            elif field == "forecast_hourly":
-                cnt = 1
-                for item in value:
-                    print(item.conditions, item.utc_time)
-                    cnt += 1
-                    if cnt > 10:
-                        break
-            else:
+    try:
+        data: ObservationDescription = await weatherflow.update_observations()
+        if data is not None:
+            for field in data.__dataclass_fields__:
+                value = getattr(data, field)
                 print(field, "-", value)
+    except Invalid as err:
+        _LOGGER.debug(err)
+
+    try:
+        data: ForecastDescription = await weatherflow.update_forecast()
+        if data is not None:
+            for field in data.__dataclass_fields__:
+                value = getattr(data, field)
+                if field == "forecast_daily":
+                    # continue
+                    for item in value:
+                        print(
+                            item.utc_time,
+                            item.conditions,
+                            "Temp High: ",
+                            item.air_temp_high,
+                            "Temp Low: ",
+                            item.air_temp_low,
+                            item.precip, item.wind_avg,
+                            item.wind_direction
+                        )
+                elif field == "forecast_hourly":
+                    cnt = 1
+                    for item in value:
+                        print(item.conditions, item.utc_time)
+                        cnt += 1
+                        if cnt > 10:
+                            break
+                else:
+                    print(field, "-", value)
+    except Invalid as err:
+        _LOGGER.debug(err)
 
     end = time.time()
 
