@@ -193,6 +193,7 @@ class WeatherFlowApiClient:
 
                 entity_data = ObservationDescription(
                     key=self.station_id,
+                    station_name=self._station_data.name,
                     utc_time=self.cnv.utc_from_timestamp(obervations.get("timestamp")),
                     air_temperature=self.cnv.temperature(obervations.get("air_temperature")),
                     barometric_pressure=self.cnv.pressure(obervations.get("barometric_pressure")),
