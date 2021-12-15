@@ -2,6 +2,17 @@
 
 This document will contain a list of all major changes.
 
+## [0.1.19] - 2021-12-15
+
+### Added
+
+- New sensor data point `station_name`. Will be used as a sensor in Home Assistant with the Station Data attached as Attributes.
+
+### Changed
+
+- Limited the number of items in the Hourly Forecast array to 48, as the default of 240 items, was creating warnings in Home Assistant.
+
+
 ## [0.1.18] - 2021-12-14
 
 ### Changes
