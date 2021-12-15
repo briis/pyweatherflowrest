@@ -19,6 +19,7 @@ from pyweatherflowrest.const import (
     WEATHERFLOW_STATIONS_BASE_URL,
 )
 from pyweatherflowrest.data import (
+    DeviceDescription,
     ObservationDescription,
     StationDescription,
     ForecastDescription,
@@ -101,6 +102,7 @@ class WeatherFlowApiClient:
             if data["stations"] == []:
                 raise Invalid(f"The data returned from Station ID {self.station_id} is invalid") from None
 
+            device_list = []
             station = data["stations"][0]
             entity_data = StationDescription(
                 key=self.station_id,
@@ -119,24 +121,37 @@ class WeatherFlowApiClient:
                     entity_data.hub_firmware_revision = device["firmware_revision"]
                     entity_data.hub_serial_number = device["serial_number"]
                 if device["device_type"] == "ST":
-                    entity_data.tempest_device_id = device["device_id"]
-                    entity_data.tempest_device_type = DEVICE_TYPE_TEMPEST
-                    entity_data.tempest_hardware_revision = device["hardware_revision"]
-                    entity_data.tempest_firmware_revision = device["firmware_revision"]
-                    entity_data.tempest_serial_number = device["serial_number"]
+                    device_data = DeviceDescription(
+                        device_id=device["device_id"],
+                        name=device["device_meta"]["name"],
+                        device_type=DEVICE_TYPE_TEMPEST,
+                        hardware_revision=device["hardware_revision"],
+                        firmware_revision=device["firmware_revision"],
+                        serial_number=device["serial_number"],
+                    )
+                    device_list.append(device_data)
                     entity_data.is_tempest = True
                 if device["device_type"] == "AR":
-                    entity_data.air_device_id = device["device_id"]
-                    entity_data.air_device_type = DEVICE_TYPE_AIR
-                    entity_data.air_hardware_revision = device["hardware_revision"]
-                    entity_data.air_firmware_revision = device["firmware_revision"]
-                    entity_data.air_serial_number = device["serial_number"]
+                    device_data = DeviceDescription(
+                        device_id=device["device_id"],
+                        name=device["device_meta"]["name"],
+                        device_type=DEVICE_TYPE_AIR,
+                        hardware_revision=device["hardware_revision"],
+                        firmware_revision=device["firmware_revision"],
+                        serial_number=device["serial_number"],
+                    )
+                    device_list.append(device_data)
                 if device["device_type"] == "SK":
-                    entity_data.sky_device_id = device["device_id"]
-                    entity_data.sky_device_type = DEVICE_TYPE_SKY
-                    entity_data.sky_hardware_revision = device["hardware_revision"]
-                    entity_data.sky_firmware_revision = device["firmware_revision"]
-                    entity_data.sky_serial_number = device["serial_number"]
+                    device_data = DeviceDescription(
+                        device_id=device["device_id"],
+                        name=device["device_meta"]["name"],
+                        device_type=DEVICE_TYPE_SKY,
+                        hardware_revision=device["hardware_revision"],
+                        firmware_revision=device["firmware_revision"],
+                        serial_number=device["serial_number"],
+                    )
+                    device_list.append(device_data)
+                entity_data.device_list = device_list
 
             self._station_data = entity_data
 

@@ -46,40 +46,40 @@ async def main() -> None:
             value = getattr(data, field)
             print(field,"-", value)
 
-    try:
-        data: ObservationDescription = await weatherflow.update_observations()
-        if data is not None:
-            for field in data.__dataclass_fields__:
-                value = getattr(data, field)
-                print(field, "-", value)
-    except Invalid as err:
-        _LOGGER.debug(err)
+    # try:
+    #     data: ObservationDescription = await weatherflow.update_observations()
+    #     if data is not None:
+    #         for field in data.__dataclass_fields__:
+    #             value = getattr(data, field)
+    #             print(field, "-", value)
+    # except Invalid as err:
+    #     _LOGGER.debug(err)
 
-    try:
-        data: ForecastDescription = await weatherflow.update_forecast()
-        if data is not None:
-            for field in data.__dataclass_fields__:
-                value = getattr(data, field)
-                if field == "forecast_daily":
-                    # continue
-                    for item in value:
-                        print(
-                            item.utc_time,
-                            item.conditions,
-                            "Temp High: ",
-                            item.air_temp_high,
-                            "Temp Low: ",
-                            item.air_temp_low,
-                            item.precip, item.wind_avg,
-                            item.wind_direction
-                        )
-                elif field == "forecast_hourly":
-                    for item in value:
-                        print(item.conditions, item.utc_time)
-                else:
-                    print(field, "-", value)
-    except Invalid as err:
-        _LOGGER.debug(err)
+    # try:
+    #     data: ForecastDescription = await weatherflow.update_forecast()
+    #     if data is not None:
+    #         for field in data.__dataclass_fields__:
+    #             value = getattr(data, field)
+    #             if field == "forecast_daily":
+    #                 # continue
+    #                 for item in value:
+    #                     print(
+    #                         item.utc_time,
+    #                         item.conditions,
+    #                         "Temp High: ",
+    #                         item.air_temp_high,
+    #                         "Temp Low: ",
+    #                         item.air_temp_low,
+    #                         item.precip, item.wind_avg,
+    #                         item.wind_direction
+    #                     )
+    #             elif field == "forecast_hourly":
+    #                 for item in value:
+    #                     print(item.conditions, item.utc_time)
+    #             else:
+    #                 print(field, "-", value)
+    # except Invalid as err:
+        # _LOGGER.debug(err)
 
     end = time.time()
 

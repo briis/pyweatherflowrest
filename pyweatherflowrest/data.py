@@ -90,22 +90,17 @@ class StationDescription:
     hub_hardware_revision: int | None = None
     hub_firmware_revision: int | None = None
     hub_serial_number: int | None = None
-    tempest_device_id: int | None = None
-    tempest_device_type: str | None = None
-    tempest_hardware_revision: int | None = None
-    tempest_firmware_revision: int | None = None
-    tempest_serial_number: int | None = None
-    air_device_id: int | None = None
-    air_device_type: str | None = None
-    air_hardware_revision: int | None = None
-    air_firmware_revision: int | None = None
-    air_serial_number: int | None = None
-    sky_device_id: int | None = None
-    sky_device_type: str | None = None
-    sky_hardware_revision: int | None = None
-    sky_firmware_revision: int | None = None
-    sky_serial_number: int | None = None
+    device_list: list[DeviceDescription] = field(default_factory=list)
 
+@dataclass
+class DeviceDescription:
+    """Class describing a Physical Device."""
+    device_id: int
+    name: str | None = None
+    device_type: str | None = None
+    hardware_revision: int | None = None
+    firmware_revision: int | None = None
+    serial_number: int | None = None
 
 @dataclass
 class ForecastDailyDescription:
