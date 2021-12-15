@@ -74,12 +74,8 @@ async def main() -> None:
                             item.wind_direction
                         )
                 elif field == "forecast_hourly":
-                    cnt = 1
                     for item in value:
                         print(item.conditions, item.utc_time)
-                        cnt += 1
-                        if cnt > 10:
-                            break
                 else:
                     print(field, "-", value)
     except Invalid as err:

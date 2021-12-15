@@ -339,6 +339,7 @@ class WeatherFlowApiClient:
                     entity_data.forecast_daily.append(day_item)
 
             forecast_hourly = data["forecast"]["hourly"]
+            hour_cnt = 1
             for item in forecast_hourly:
                 hour_item = ForecastHourlyDescription(
                     utc_time=self.cnv.utc_from_timestamp(item["time"]),
@@ -357,6 +358,9 @@ class WeatherFlowApiClient:
                     feels_like=self.cnv.temperature(item["feels_like"]),
                 )
                 entity_data.forecast_hourly.append(hour_item)
+                hour_cnt += 1
+                if hour_cnt >= 48:
+                    break
 
             return entity_data
 
