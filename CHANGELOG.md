@@ -11,7 +11,7 @@ This document will contain a list of all major changes.
 ### Changed
 
 - Limited the number of items in the Hourly Forecast array to 48, as the default of 240 items, was creating warnings in Home Assistant.
-
+- Restructured the StationDescription dataclass so that all attached physical devices are added as a list to the class.
 
 ## [0.1.18] - 2021-12-14
 
