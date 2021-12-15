@@ -46,14 +46,14 @@ async def main() -> None:
             value = getattr(data, field)
             print(field,"-", value)
 
-    # try:
-    #     data: ObservationDescription = await weatherflow.update_observations()
-    #     if data is not None:
-    #         for field in data.__dataclass_fields__:
-    #             value = getattr(data, field)
-    #             print(field, "-", value)
-    # except Invalid as err:
-    #     _LOGGER.debug(err)
+    try:
+        data: ObservationDescription = await weatherflow.update_observations()
+        if data is not None:
+            for field in data.__dataclass_fields__:
+                value = getattr(data, field)
+                print(field, "-", value)
+    except Invalid as err:
+        _LOGGER.debug(err)
 
     # try:
     #     data: ForecastDescription = await weatherflow.update_forecast()

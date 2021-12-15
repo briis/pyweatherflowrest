@@ -157,36 +157,37 @@ class WeatherFlowApiClient:
 
     async def _read_device_data(self) -> None:
         """Update observation data."""
-        if self._station_data.is_tempest:
-            self._device_id = self._station_data.tempest_device_id
-            voltage_index = 16
-            data = await self._api_request(self.device_url)
-            if data is not None:
-                device = data["obs"][0]
-                self._observation_data.voltage_tempest = device[voltage_index]
-                self._observation_data.battery_tempest = self.calc.battery_percent(
-                    self._station_data.is_tempest, device[voltage_index]
-                )
-        else:
-            self._device_id = self._station_data.air_device_id
-            voltage_index = 6
-            data = await self._api_request(self.device_url)
-            if data is not None:
-                device = data["obs"][0]
-                self._observation_data.voltage_air = device[voltage_index]
-                self._observation_data.battery_air = self.calc.battery_percent(
-                    self._station_data.is_tempest, device[voltage_index]
-                )
-
-            self._device_id = self._station_data.sky_device_id
-            voltage_index = 8
-            data = await self._api_request(self.device_url)
-            if data is not None:
-                device = data["obs"][0]
-                self._observation_data.voltage_sky = device[voltage_index]
-                self._observation_data.battery_sky = self.calc.battery_percent(
-                    self._station_data.is_tempest, device[voltage_index]
-                )
+        for item in self._station_data.device_list:
+            if item.device_type == DEVICE_TYPE_TEMPEST:
+                self._device_id = item.device_id
+                voltage_index = 16
+                data = await self._api_request(self.device_url)
+                if data is not None:
+                    device = data["obs"][0]
+                    self._observation_data.voltage_tempest = device[voltage_index]
+                    self._observation_data.battery_tempest = self.calc.battery_percent(
+                        self._station_data.is_tempest, device[voltage_index]
+                    )
+            if item.device_type == DEVICE_TYPE_AIR:
+                self._device_id = item.device_id
+                voltage_index = 6
+                data = await self._api_request(self.device_url)
+                if data is not None:
+                    device = data["obs"][0]
+                    self._observation_data.voltage_air = device[voltage_index]
+                    self._observation_data.battery_air = self.calc.battery_percent(
+                        self._station_data.is_tempest, device[voltage_index]
+                    )
+            if item.device_type == DEVICE_TYPE_SKY:
+                self._device_id = item.device_id
+                voltage_index = 8
+                data = await self._api_request(self.device_url)
+                if data is not None:
+                    device = data["obs"][0]
+                    self._observation_data.voltage_sky = device[voltage_index]
+                    self._observation_data.battery_sky = self.calc.battery_percent(
+                        self._station_data.is_tempest, device[voltage_index]
+                    )
 
     async def update_observations(self) -> None:
         """Update observation data."""
