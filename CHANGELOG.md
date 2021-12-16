@@ -2,6 +2,13 @@
 
 This document will contain a list of all major changes.
 
+## [0.1.20] - 2021-12-16
+
+### Added
+
+- New sensor data points `precip_accum_local_day_final`, `precip_accum_local_yesterday_final`, `precip_minutes_local_yesterday_final`. These values will only appear for stations located in the US, as they are depended on *Rain Check* and that only works in the US.
+
+
 ## [0.1.19] - 2021-12-15
 
 ### Added

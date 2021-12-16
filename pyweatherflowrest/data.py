@@ -23,9 +23,12 @@ class ObservationDescription:
     precip_intensity: str | None = None
     precip_accum_last_1hr: float | None = None
     precip_accum_local_day: float | None = None
+    precip_accum_local_day_final: float | None = None
     precip_accum_local_yesterday: float | None = None
+    precip_accum_local_yesterday_final: float | None = None
     precip_minutes_local_day: int | None = None
     precip_minutes_local_yesterday: int | None = None
+    precip_minutes_local_yesterday_final: int | None = None
     wind_avg: float | None = None
     wind_direction: int | None = None
     wind_cardinal: str | None = None
