@@ -43,12 +43,14 @@ class WeatherFlowApiClient:
         api_token: str,
         units: Optional[str] = UNIT_TYPE_METRIC,
         homeassistant: Optional(bool) = False,
+        forecast_hours: Optional[int] = 48,
         session: Optional[aiohttp.ClientSession] = None,
     ) -> None:
         """Initialize Api Class."""
         self.station_id = station_id
         self.api_token = api_token
         self.units = units
+        self.forecast_hours = forecast_hours
         self.homeassistant = homeassistant
 
         if self.units not in VALID_UNIT_TYPES:
@@ -378,7 +380,7 @@ class WeatherFlowApiClient:
                 )
                 entity_data.forecast_hourly.append(hour_item)
                 hour_cnt += 1
-                if hour_cnt >= 48:
+                if hour_cnt >= self.forecast_hours:
                     break
 
             return entity_data
