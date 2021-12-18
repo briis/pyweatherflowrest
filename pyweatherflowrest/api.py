@@ -379,9 +379,9 @@ class WeatherFlowApiClient:
                     feels_like=self.cnv.temperature(item["feels_like"]),
                 )
                 entity_data.forecast_hourly.append(hour_item)
-                hour_cnt += 1
                 if hour_cnt >= self.forecast_hours:
                     break
+                hour_cnt += 1
 
             return entity_data
 
