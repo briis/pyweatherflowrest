@@ -2,6 +2,13 @@
 
 This document will contain a list of all major changes.
 
+## [0.1.21] - Unreleased
+
+### Added
+
+- Add possibility to specify how many hours of the the Hourly Forecast data should be returned.
+
+
 ## [0.1.20] - 2021-12-16
 
 ### Added
