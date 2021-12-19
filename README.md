@@ -20,12 +20,14 @@ pip install pyweatherflowrest
 
 This library is primarily designed to be used in an async context.
 
-The main interface for the library is the `pyweatherflowrest.WeatherFlowApiClient`. This interface takes 4 options:
+The main interface for the library is the `pyweatherflowrest.WeatherFlowApiClient`. This interface takes 6 options:
 
 * `station_id`: (required) Supply the station id for the station you want data for.
 * `api_token`: (required) Enter your personal api token for the above station id. You can get your *Personal Use Token* [by going here](https://tempestwx.com/settings/tokens) and login with your credentials. Then click CREATE TOKEN in the upper right corner.
 * `units`: (optional) Valid options here are *metric* or *imperial*. WeatherFlow stations always deliver data in metric units, so conversion will only take place if if metric is not selected. Default value is **metric**
+* `forecast_hours`: (optional) Specify how many hours of the *Hourly Forecast* that needs to be retrieved. Values between 1 and 240 are valid. Default value is **48** hours.
 * `homeassistant`: (optional) Valid options are *True* or *False*. If set to True, there will be some unit types that will not be converted, as Home Assistant will take care of that. Default value is **False**
+* `session`: (optional) An existing *aiohttp.ClientSession*. Default value is **None**, and then a new ClientSession will be created.
 
 ```python
 import asyncio
