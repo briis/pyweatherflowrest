@@ -116,13 +116,13 @@ class WeatherFlowApiClient:
                 elevation=station["station_meta"]["elevation"],
             )
             for device in station["devices"]:
-                if device["device_type"] == "HB":
+                if device.get("device_type") == "HB":
                     entity_data.hub_device_id = device["device_id"]
                     entity_data.hub_device_type = DEVICE_TYPE_HUB
                     entity_data.hub_hardware_revision = device["hardware_revision"]
                     entity_data.hub_firmware_revision = device["firmware_revision"]
                     entity_data.hub_serial_number = device["serial_number"]
-                if device["device_type"] == "ST":
+                if device.get("device_type") == "ST":
                     device_data = DeviceDescription(
                         device_id=device["device_id"],
                         name=device["device_meta"]["name"],
@@ -133,7 +133,7 @@ class WeatherFlowApiClient:
                     )
                     device_list.append(device_data)
                     entity_data.is_tempest = True
-                if device["device_type"] == "AR":
+                if device.get("device_type") == "AR":
                     device_data = DeviceDescription(
                         device_id=device["device_id"],
                         name=device["device_meta"]["name"],
@@ -143,7 +143,7 @@ class WeatherFlowApiClient:
                         serial_number=device["serial_number"],
                     )
                     device_list.append(device_data)
-                if device["device_type"] == "SK":
+                if device.get("device_type") == "SK":
                     device_data = DeviceDescription(
                         device_id=device["device_id"],
                         name=device["device_meta"]["name"],
