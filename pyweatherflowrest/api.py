@@ -286,10 +286,13 @@ class WeatherFlowApiClient:
 
                 return self._observation_data
         except IndexError as err:
-            error_message = f"Error occured processing data. Error message: {err}"
-            if "list index out of range" in str(err):
-                error_message = "Empty dataset returned from WeatherFlow. Make sure the station is online."
+            error_message = "Empty dataset returned from WeatherFlow. Make sure the station is online."
             raise Invalid(error_message) from None
+        except KeyError as err:
+            error_message = "Empty dataset returned from WeatherFlow. Make sure the station is online."
+            raise Invalid(error_message) from None
+        except Exception as err:
+            raise Invalid(f"Error occured processing data. Error message: {err}") from None
 
         return None
 
