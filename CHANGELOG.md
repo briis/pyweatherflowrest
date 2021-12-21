@@ -2,6 +2,13 @@
 
 This document will contain a list of all major changes.
 
+## [0.1.22] - 2021-12-21
+
+### Fixed
+
+- Fixed error when Device List did not contain a `devie_type` which would stop the system from loading any data.
+
+
 ## [0.1.21] - 2021-12-18
 
 ### Added
