@@ -81,7 +81,13 @@ async def main() -> None:
                         cnt += 1
                 else:
                     print(field, "-", value)
+    except WrongStationID as err:
+        _LOGGER.debug(err)
     except Invalid as err:
+        _LOGGER.debug(err)
+    except NotAuthorized as err:
+        _LOGGER.debug(err)
+    except BadRequest as err:
         _LOGGER.debug(err)
 
     end = time.time()
