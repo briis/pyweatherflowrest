@@ -2,7 +2,9 @@
 
 This document will contain a list of all major changes.
 
-## [0.2.0] - Unreleased
+## [1.0.0] - Unreleased
+
+After a lot of testing I believe we are now at a point where this module will be called 1.0.0 as it is stable and delivers as expected.
 
 ### Added
 
