@@ -9,6 +9,7 @@ After a lot of testing I believe we are now at a point where this module will be
 ### Added
 
 - New data point *freezing_line*. It holds the altitude above sea level where snow is possible in meters or feet, depending on unit system.
+- New data point *cloud_base*. It holds the cloud height altitude above sea level in meters or feet, depending on unit system.
 
 ## [0.1.23] - 2021-12-22
 
