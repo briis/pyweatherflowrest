@@ -202,12 +202,13 @@ class WeatherFlowApiClient:
                 obervations: dict = data['obs'][0]
 
                 beaufort_data: BeaufortDescription = self.calc.beaufort_value(obervations.get("wind_avg"))
-                freezingline = self.calc.freezing_line(obervations["air_temperature"], self._station_data.elevation)
+                cloudbase = self.calc.cloud_base(obervations.get("air_temperature"), obervations.get("dew_point"), self._station_data.elevation)
+                freezingline = self.calc.freezing_line(obervations.get("air_temperature"), self._station_data.elevation)
                 visibility = self.calc.visibility(
                     self._station_data.elevation,
-                    obervations["air_temperature"],
-                    obervations["relative_humidity"],
-                    obervations["dew_point"]
+                    obervations.get("air_temperature"),
+                    obervations.get("relative_humidity"),
+                    obervations.get("dew_point")
                 )
                 
                 entity_data = ObservationDescription(
@@ -271,6 +272,7 @@ class WeatherFlowApiClient:
                     ),
                     beaufort=beaufort_data.value,
                     beaufort_description=beaufort_data.description,
+                    cloud_base=self.cnv.altitude(cloudbase),
                     freezing_line=self.cnv.altitude(freezingline),
                 )
 

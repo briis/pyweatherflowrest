@@ -73,6 +73,7 @@ class ObservationDescription:
     is_lightning: bool | None = None
     station_name: str | None = None
     freezing_line: float | None = None
+    cloud_base: float | None = None
 
 
 @dataclass

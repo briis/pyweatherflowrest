@@ -162,6 +162,13 @@ class Calculations:
             "wind_direction": int(_sum_wind_bearing)
         }
 
+    def cloud_base(self, air_temperature: float, dew_point: float, elevation: float) -> float:
+        """Return Cloud Base in meters."""
+        if elevation is None or air_temperature is None or dew_point is None:
+            return None
+
+        return (air_temperature - dew_point) * 126 + elevation
+
     def freezing_line(self, air_temperature: float, elevation: float) -> float:
         """Return altitude above sea level where snow is possible."""
         if elevation is None or air_temperature is None:
