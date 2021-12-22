@@ -20,6 +20,14 @@ class Conversions:
         self.units = units
         self.homeassistant = homeassistant
 
+    def altitude(self, value) -> float:
+        """Return meter to feet conversion."""
+        if value is None:
+            return None
+        if self.units == UNIT_TYPE_METRIC:
+            return round(value, 1)
+        return round(value * 3.2808, 1)
+        
     def temperature(self, value) -> float:
         """Return celcius to Fahrenheit."""
         if value is None or self.units == UNIT_TYPE_METRIC or self.homeassistant:
@@ -153,6 +161,12 @@ class Calculations:
             "wind_avg": round(_sum_wind_avg, 1),
             "wind_direction": int(_sum_wind_bearing)
         }
+
+    def freezing_line(self, air_temperature: float, elevation: float) -> float:
+        """Return altitude above sea level where snow is possible."""
+        if elevation is None or air_temperature is None:
+            return None
+        return (192 * air_temperature) + elevation
 
     def visibility(self, elevation, air_temperature, relative_humidity, dewpoint) -> float:
         """Return the calculated visibility."""
