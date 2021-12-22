@@ -2,6 +2,12 @@
 
 This document will contain a list of all major changes.
 
+## [0.1.23] - Unreleased
+
+### Changed
+
+- Added better error handling, when no data is returned from WeatherFlow
+
 ## [0.1.22] - 2021-12-21
 
 ### Fixed
