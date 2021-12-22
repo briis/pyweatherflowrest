@@ -2,6 +2,12 @@
 
 This document will contain a list of all major changes.
 
+## [0.2.0] - Unreleased
+
+### Added
+
+- New data point *freezing_line*. It holds the altitude above sea level where snow is possible in meters or feet, depending on unit system.
+
 ## [0.1.23] - 2021-12-22
 
 ### Changed
