@@ -173,7 +173,8 @@ class Calculations:
         """Return altitude above sea level where snow is possible."""
         if elevation is None or air_temperature is None:
             return None
-        return (192 * air_temperature) + elevation
+        freeze_line = (192 * air_temperature) + elevation
+        return 0 if freeze_line < 0 else freeze_line
 
     def visibility(self, elevation, air_temperature, relative_humidity, dewpoint) -> float:
         """Return the calculated visibility."""
