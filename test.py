@@ -37,26 +37,26 @@ async def main() -> None:
     # data = await weatherflow.load_unit_system()
     # print(data)
 
-    # data: StationDescription = weatherflow.station_data
-    # if data is not None:
-    #     for field in data.__dataclass_fields__:
-    #         value = getattr(data, field)
-    #         print(field,"-", value)
+    data: StationDescription = weatherflow.station_data
+    if data is not None:
+        for field in data.__dataclass_fields__:
+            value = getattr(data, field)
+            print(field,"-", value)
 
-    try:
-        data: ObservationDescription = await weatherflow.update_observations()
-        if data is not None:
-            for field in data.__dataclass_fields__:
-                value = getattr(data, field)
-                print(field, "-", value)
-    except WrongStationID as err:
-        _LOGGER.debug(err)
-    except Invalid as err:
-        _LOGGER.debug(err)
-    except NotAuthorized as err:
-        _LOGGER.debug(err)
-    except BadRequest as err:
-        _LOGGER.debug(err)
+    # try:
+    #     data: ObservationDescription = await weatherflow.update_observations()
+    #     if data is not None:
+    #         for field in data.__dataclass_fields__:
+    #             value = getattr(data, field)
+    #             print(field, "-", value)
+    # except WrongStationID as err:
+    #     _LOGGER.debug(err)
+    # except Invalid as err:
+    #     _LOGGER.debug(err)
+    # except NotAuthorized as err:
+    #     _LOGGER.debug(err)
+    # except BadRequest as err:
+    #     _LOGGER.debug(err)
 
     # try:
     #     data: ForecastDescription = await weatherflow.update_forecast()

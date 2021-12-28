@@ -406,9 +406,11 @@ class WeatherFlowApiClient:
         pressure_unit = "hPa" if self._is_metric else "inHg"
         precip_unit = "mm" if self._is_metric else "in"
         temp_unit = "°C" if self._is_metric else "°F"
+        altitude_unit = "m" if self._is_metric else "ft"
 
         units_list: dict = {
             "none": None,
+            "altitude": altitude_unit,
             "density": density_unit,
             "distance": distance_unit,
             "length": length_unit,
