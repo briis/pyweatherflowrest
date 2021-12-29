@@ -2,6 +2,12 @@
 
 This document will contain a list of all major changes.
 
+## [1.0.2] - 2021-12-29
+
+### Fixed
+
+- Feels Like forecast temperature had wrong value when displayd with Imperial Units.
+
 ## [1.0.1] - 2021-12-28
 
 ### Added
