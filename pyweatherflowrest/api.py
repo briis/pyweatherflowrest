@@ -384,7 +384,7 @@ class WeatherFlowApiClient:
                         wind_direction_cardinal=item["wind_direction_cardinal"],
                         wind_gust=self.cnv.windspeed(item["wind_gust"], self.homeassistant),
                         uv=item["uv"],
-                        feels_like=self.cnv.temperature(item["feels_like"]),
+                        feels_like=self.cnv.temperature(item["feels_like"], True),
                     )
                     entity_data.forecast_hourly.append(hour_item)
                     if hour_cnt >= self.forecast_hours:

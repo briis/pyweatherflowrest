@@ -28,9 +28,9 @@ class Conversions:
             return round(value, 1)
         return round(value * 3.2808, 1)
         
-    def temperature(self, value) -> float:
+    def temperature(self, value, force_f: bool = False) -> float:
         """Return celcius to Fahrenheit."""
-        if value is None or self.units == UNIT_TYPE_METRIC or self.homeassistant:
+        if (value is None or self.units == UNIT_TYPE_METRIC or self.homeassistant) and not force_f:
             return value
         return round(value * 1.8 + 32, 1)
 
