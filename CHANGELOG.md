@@ -6,7 +6,7 @@ This document will contain a list of all major changes.
 
 ### Fixed
 
-- Feels Like forecast temperature had wrong value when displayd with Imperial Units.
+- Feels Like forecast temperature had wrong value when displayed with Imperial Units.
 
 ## [1.0.1] - 2021-12-28
 
