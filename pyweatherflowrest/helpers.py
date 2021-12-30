@@ -30,8 +30,15 @@ class Conversions:
         
     def temperature(self, value, force_f: bool = False) -> float:
         """Return celcius to Fahrenheit."""
-        if (value is None or self.units == UNIT_TYPE_METRIC or self.homeassistant) and not force_f:
+        if value is None:
+            return None
+        
+        if self.units == UNIT_TYPE_METRIC:
             return value
+
+        if self.homeassistant and not force_f:
+            return value
+
         return round(value * 1.8 + 32, 1)
 
     def pressure(self, value) -> float:
