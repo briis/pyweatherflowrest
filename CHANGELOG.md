@@ -2,6 +2,12 @@
 
 This document will contain a list of all major changes.
 
+## [1.0.3] - 2021-12-30
+
+### Fixed
+
+- Previous fix worked for Imperial users, but then broke it for Metric users. Is now working for both unit systems.
+
 ## [1.0.2] - 2021-12-29
 
 ### Fixed
