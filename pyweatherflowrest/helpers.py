@@ -112,11 +112,17 @@ class Conversions:
         return round(value * 3.6, 1)
 
     def utc_from_timestamp(self, timestamp: int) -> str:
-        """Return a UTC time from a timestamp."""
+        """Return a UTC time from a timestamp as string."""
         if timestamp is None:
             return None
         dt_obj = dt.datetime.utcfromtimestamp(timestamp).replace(tzinfo=UTC)
         return dt_obj.strftime("%Y-%m-%dT%H:%M:%S+00:00")
+
+    def utc_from_timestamp_to_date(self, timestamp: int) -> dt.datetime:
+        """Return a UTC time from a timestamp as dateTime."""
+        if timestamp is None:
+            return None
+        return dt.datetime.utcfromtimestamp(timestamp).replace(tzinfo=UTC)
 
     def uv_index(self, uvi: float) -> float:
         """Return rounded UV Index."""

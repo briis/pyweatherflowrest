@@ -246,7 +246,7 @@ class WeatherFlowApiClient:
                     uv=self.cnv.uv_index(obervations.get("uv")),
                     uv_description=self.calc.uv_description(obervations.get("uv")),
                     brightness=obervations.get("brightness"),
-                    lightning_strike_last_epoch=self.cnv.utc_from_timestamp(
+                    lightning_strike_last_epoch=self.cnv.utc_from_timestamp_to_date(
                         obervations.get("lightning_strike_last_epoch")
                     ),
                     lightning_strike_last_distance=self.cnv.distance(
@@ -335,7 +335,7 @@ class WeatherFlowApiClient:
                     lightning_strike_count_last_3hr=current.get("lightning_strike_count_last_3hr"),
                     lightning_strike_last_distance=current.get("lightning_strike_last_distance"),
                     lightning_strike_last_distance_msg=current.get("lightning_strike_last_distance_msg"),
-                    lightning_strike_last_epoch=self.cnv.utc_from_timestamp(
+                    lightning_strike_last_epoch=self.cnv.utc_from_timestamp_to_date(
                         current.get("lightning_strike_last_epoch")
                     ),
                     precip_accum_local_day=self.cnv.rain(current.get("precip_accum_local_day")),
