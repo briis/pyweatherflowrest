@@ -149,7 +149,7 @@ class ForecastDescription:
     """This is the Key identifier for this entity"""
     key: int
 
-    utc_time: int | None = None
+    utc_time: str | None = None
     conditions: str | None = None
     icon: str | None = None
     air_temperature: float | None = None
