@@ -2,6 +2,12 @@
 
 This document will contain a list of all major changes.
 
+## [1.0.7] - 2022-01-02
+
+### Changed
+
+- Changed error description when we could not get data from WeatherFlow, to something that better reflects the error.
+
 
 ## [1.0.6] - 2022-01-02
 
