@@ -111,7 +111,7 @@ class DeviceDescription:
 class ForecastDailyDescription:
     """A class that describes Daily Forecast entities."""
 
-    utc_time: int | None = None
+    utc_time: str | None = None
     conditions: str | None = None
     icon: str | None = None
     sunrise: int | None = None
@@ -127,7 +127,7 @@ class ForecastDailyDescription:
 class ForecastHourlyDescription:
     """A class that describes Hourly Forecast entities."""
 
-    utc_time: int | None = None
+    utc_time: str | None = None
     conditions: str | None = None
     icon: str | None = None
     air_temperature: float | None = None
