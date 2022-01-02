@@ -2,6 +2,13 @@
 
 This document will contain a list of all major changes.
 
+
+## [1.0.6] - 2022-01-02
+
+### Changed
+
+- Reverted Lightning time to DateTime object.
+
 ## [1.0.5] - 2022-01-02
 
 ### Changed
