@@ -295,6 +295,9 @@ class WeatherFlowApiClient:
         except KeyError as err:
             error_message = "Empty dataset returned from WeatherFlow. Make sure the station is online."
             raise Invalid(error_message) from None
+        except TypeError as err:
+            error_message = "Timeout fetching weatherflow data."
+            raise Invalid(error_message) from None
         except Exception as err:
             raise Invalid(f"Error occured processing data. Error message: {err}") from None
 
