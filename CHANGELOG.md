@@ -2,6 +2,13 @@
 
 This document will contain a list of all major changes.
 
+## [1.0.4] - 2022-01-02
+
+### Changed
+
+- `utc_time` is now returned as a string instead of a DateTime object, as this is what Home Assistant expects.
+
+
 ## [1.0.3] - 2021-12-30
 
 ### Fixed
