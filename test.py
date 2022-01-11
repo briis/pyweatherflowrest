@@ -15,7 +15,7 @@ async def main() -> None:
     start = time.time()
 
     weatherflow = WeatherFlowApiClient(
-        65947,
+        54213,
         "20c70eae-e62f-4d3b-b3a4-8586e90f3ac8",
         units="metric",
         homeassistant=True,

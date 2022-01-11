@@ -358,7 +358,7 @@ class WeatherFlowApiClient:
                         day_item = ForecastDailyDescription(
                             utc_time=self.cnv.utc_from_timestamp(item["day_start_local"]),
                             conditions=item["conditions"],
-                            icon=item["icon"],
+                            icon="cloudy" if item.get("icon") is None else item.get("icon"),
                             sunrise=item["sunrise"],
                             sunset=item["sunset"],
                             air_temp_high=self.cnv.temperature(item["air_temp_high"]),
