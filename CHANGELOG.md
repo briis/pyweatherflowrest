@@ -2,6 +2,12 @@
 
 This document will contain a list of all major changes.
 
+## [1.0.8] - Unreleased
+
+### Fixed
+
+- In rare occasions the forecast icon is not present in data supplied from WeatherFlow. Will now be set to *Cloudy* as default.
+
 ## [1.0.7] - 2022-01-02
 
 ### Changed
