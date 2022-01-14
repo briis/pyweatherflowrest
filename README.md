@@ -1,4 +1,4 @@
-# Python Wrapper for WeatherFlow REST API
+# 🌤️ Python Wrapper for WeatherFlow REST API
 
 ![Latest PyPI version](https://img.shields.io/pypi/v/pyweatherflowrest) ![Supported Python](https://img.shields.io/pypi/pyversions/pyweatherflowrest)
 
