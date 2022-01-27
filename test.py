@@ -15,11 +15,11 @@ async def main() -> None:
     start = time.time()
 
     weatherflow = WeatherFlowApiClient(
-        54213,
+        34094,
         "20c70eae-e62f-4d3b-b3a4-8586e90f3ac8",
         units="metric",
         homeassistant=True,
-        forecast_hours=10,
+        forecast_hours=240,
     )
 
     try:
@@ -68,7 +68,7 @@ async def main() -> None:
                     for item in value:
                         print(
                             item.utc_time,
-                            item.conditions,
+                            item.icon,
                             "Temp High: ",
                             item.air_temp_high,
                             "Temp Low: ",
@@ -79,7 +79,7 @@ async def main() -> None:
                 elif field == "forecast_hourly":
                     cnt = 1
                     for item in value:
-                        print(cnt, item.conditions, item.utc_time, item.air_temperature, item.feels_like)
+                        print(cnt, item.icon, item.utc_time, item.air_temperature, item.feels_like)
                         cnt += 1
                 else:
                     print(field, "-", value)

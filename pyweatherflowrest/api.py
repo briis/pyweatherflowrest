@@ -376,7 +376,7 @@ class WeatherFlowApiClient:
                     hour_item = ForecastHourlyDescription(
                         utc_time=self.cnv.utc_from_timestamp(item["time"]),
                         conditions=item["conditions"],
-                        icon=item["icon"],
+                        icon="cloudy" if item.get("icon") is None else item.get("icon"),
                         air_temperature=self.cnv.temperature(item["air_temperature"]),
                         sea_level_pressure=self.cnv.pressure(item["sea_level_pressure"]),
                         relative_humidity=item["relative_humidity"],
