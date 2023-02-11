@@ -402,7 +402,7 @@ class WeatherFlowApiClient:
 
     async def load_unit_system(self) -> None:
         """Return unit of meassurement based on unit system."""
-        density_unit = "kg/m^3" if self._is_metric else "lb/ft^3"
+        density_unit = "kg/m³" if self._is_metric else "lb/ft³"
         distance_unit = "km" if self._is_metric else "mi"
         length_unit = "m/s" if self._is_metric else "mph"
         length_km_unit = "km/h" if self._is_metric else "mph"
