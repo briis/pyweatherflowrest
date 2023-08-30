@@ -2,6 +2,11 @@
 
 This document will contain a list of all major changes.
 
+## [1.0.10] - 2023-08-30
+
+    - Implemented PR #3 done by @UpDryTwist which address removal of sea_level_pressure and uv from hourly forecasts
+
+
 ## [1.0.9] - 2023-02-11
 
 - Changing density units to conform with standard Home Assistant units
