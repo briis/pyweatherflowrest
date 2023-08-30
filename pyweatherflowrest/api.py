@@ -36,17 +36,18 @@ _LOGGER = logging.getLogger(__name__)
 #                          of this class and the two places it's called.  This isn't very convenient to patch
 #                          where it is here!
 # TODO: Set IGNORE_FETCH_ERRORS in a way that the package user can easily configure it to ignore Weatherflow foibles.
-IGNORE_FETCH_ERRORS = True
+IGNORE_FETCH_ERRORS = False
 
+# TODO:  This should probably be in helpers.py, but I wanted to keep the change localized to one file.
 def resilient_fetch ( fetch_from, key, default ):
     """
     This can be used to fetch a value out of a suspect return, such as the JSON return from Weatherflow,
     which as demonstrated on 2023-08-28 may change at some future date.  By default, this is going to
     error out if the value's not there, but it will log what it's looking for, and you can set a flag
     to have it ignore the missing value and keep going.
-    :parameter fetch_from - the array or dictionary we're reading from
-    :parameter key - the key to read out
-    :parameter default - if the value's not there, and if we're butching through, what default to use?
+
+    Provide an array or dictionary to read from in fetch_from, and the key to use.  The default will
+    be returned if we've set IGNORE_FETCH_ERRORS, otherwise, we're going to throw a KeyError.
     """
     if key in fetch_from:
         return fetch_from[key]
