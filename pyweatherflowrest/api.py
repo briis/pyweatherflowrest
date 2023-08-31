@@ -36,7 +36,10 @@ _LOGGER = logging.getLogger(__name__)
 #                          of this class and the two places it's called.  This isn't very convenient to patch
 #                          where it is here!
 # TODO: Set IGNORE_FETCH_ERRORS in a way that the package user can easily configure it to ignore Weatherflow foibles.
-IGNORE_FETCH_ERRORS = False
+IGNORE_FETCH_ERRORS = True
+# This tracks whether we've complained yet if there was a Weatherflow error.  We want to complain at least
+# once if IGNORE_FETCH_ERRORS is set to True, so that we have at least some log trace.
+weReportedAnError = False
 
 # TODO:  This should probably be in helpers.py, but I wanted to keep the change localized to one file.
 def resilient_fetch ( fetch_from, key, default ):
@@ -52,15 +55,19 @@ def resilient_fetch ( fetch_from, key, default ):
     if key in fetch_from:
         return fetch_from[key]
     else:
-        _LOGGER.log( logging.INFO if IGNORE_FETCH_ERRORS else logging.WARNING,
-                     f"The key {key} is missing from the following array (DEBUG logging only), causing an error.  "
-                      "It is likely that the Weatherflow API has changed unexpectedly.  pyweatherflowrest on Github." )
-        _LOGGER.log( logging.DEBUG if IGNORE_FETCH_ERRORS else logging.WARNING, f"{fetch_from}" )
+        global weReportedAnError
+        _LOGGER.log( logging.DEBUG if ( IGNORE_FETCH_ERRORS and weReportedAnError ) else logging.WARNING,
+                     f"The key {key} is missing from the following array, causing an error.  "
+                      "It is likely that the Weatherflow API has changed unexpectedly.  See pyweatherflowrest on Github." )
+        _LOGGER.log( logging.DEBUG if ( IGNORE_FETCH_ERRORS and weReportedAnError ) else logging.WARNING, f"{fetch_from}" )
         if IGNORE_FETCH_ERRORS:
+            weReportedAnError = True
             return default
         else:
             # TODO: Come up with a better way to set IGNORE_FETCH_ERRORS!
-            _LOGGER.warning( f"You can set the value IGNORE_FETCH_ERRORS in pyweatherflowrest/api.py to ignore this error.")
+            if not weReportedAnError:
+                _LOGGER.warning( f"You can set the value IGNORE_FETCH_ERRORS in pyweatherflowrest/api.py to ignore this error.")
+            weReportedAnError = True
             raise KeyError(key)
 
 class WeatherFlowApiClient:
