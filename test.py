@@ -20,6 +20,7 @@ async def main() -> None:
         units="metric",
         homeassistant=True,
         forecast_hours=240,
+        ignore_fetch_errors=True
     )
 
     try:

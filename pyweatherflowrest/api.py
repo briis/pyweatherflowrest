@@ -35,11 +35,9 @@ _LOGGER = logging.getLogger(__name__)
 # UpDryTwist, 2023-08-29:  This should be set in some better way, but didn't want to do too much reengineering
 #                          of this class and the two places it's called.  This isn't very convenient to patch
 #                          where it is here!
-# TODO: Set IGNORE_FETCH_ERRORS in a way that the package user can easily configure it to ignore Weatherflow foibles.
-IGNORE_FETCH_ERRORS = False
 
-# TODO:  This should probably be in helpers.py, but I wanted to keep the change localized to one file.
-def resilient_fetch ( fetch_from, key, default ):
+
+def resilient_fetch (fetch_from, key, default, ignore_errors=False ):
     """
     This can be used to fetch a value out of a suspect return, such as the JSON return from Weatherflow,
     which as demonstrated on 2023-08-28 may change at some future date.  By default, this is going to
@@ -52,15 +50,14 @@ def resilient_fetch ( fetch_from, key, default ):
     if key in fetch_from:
         return fetch_from[key]
     else:
-        _LOGGER.log( logging.INFO if IGNORE_FETCH_ERRORS else logging.WARNING,
+        _LOGGER.log( logging.INFO if ignore_errors else logging.WARNING,
                      f"The key {key} is missing from the following array (DEBUG logging only), causing an error.  "
-                      "It is likely that the Weatherflow API has changed unexpectedly.  pyweatherflowrest on Github." )
-        _LOGGER.log( logging.DEBUG if IGNORE_FETCH_ERRORS else logging.WARNING, f"{fetch_from}" )
-        if IGNORE_FETCH_ERRORS:
+                      "It is likely that the WeatherFlow API has changed unexpectedly." )
+        _LOGGER.log( logging.DEBUG if ignore_errors else logging.WARNING, f"{fetch_from}" )
+        if ignore_errors:
             return default
         else:
-            # TODO: Come up with a better way to set IGNORE_FETCH_ERRORS!
-            _LOGGER.warning( f"You can set the value IGNORE_FETCH_ERRORS in pyweatherflowrest/api.py to ignore this error.")
+            _LOGGER.warning( f"You can set the value IGNORE_FETCH_ERRORS in the Config Menu of the WeatherFlow Integration.")
             raise KeyError(key)
 
 class WeatherFlowApiClient:
@@ -76,10 +73,12 @@ class WeatherFlowApiClient:
         homeassistant: Optional(bool) = False,
         forecast_hours: Optional[int] = 48,
         session: Optional[aiohttp.ClientSession] = None,
+        ignore_fetch_errors: Optional[bool] = True,
     ) -> None:
         """Initialize Api Class."""
         self.station_id = station_id
         self.api_token = api_token
+        self.ignore_fetch_errors = ignore_fetch_errors
         self.units = units
         self.forecast_hours = forecast_hours
         self.homeassistant = homeassistant
@@ -406,19 +405,19 @@ class WeatherFlowApiClient:
                 for item in forecast_hourly:
                     hour_item = ForecastHourlyDescription(
                         utc_time=self.cnv.utc_from_timestamp(item["time"]),
-                        conditions=resilient_fetch(item, "conditions", "Data Error"),
+                        conditions=resilient_fetch(item, "conditions", "Data Error", self.ignore_fetch_errors),
                         icon="cloudy" if item.get("icon") is None else item.get("icon"),
-                        air_temperature=self.cnv.temperature(resilient_fetch(item, "air_temperature", 20.0)),
-                        sea_level_pressure=self.cnv.pressure(resilient_fetch(item, "sea_level_pressure", 0)),
-                        relative_humidity=resilient_fetch(item, "relative_humidity", 0),
-                        precip=self.cnv.rain(resilient_fetch(item, "precip", 0)),
-                        precip_probability=resilient_fetch(item, "precip_probability", 0),
-                        wind_avg=self.cnv.windspeed(resilient_fetch(item, "wind_avg", 0), self.homeassistant),
-                        wind_direction=resilient_fetch(item, "wind_direction", 0),
-                        wind_direction_cardinal=resilient_fetch(item, "wind_direction_cardinal", "N"),
-                        wind_gust=self.cnv.windspeed(resilient_fetch(item, "wind_gust", 0.0), self.homeassistant),
-                        uv=resilient_fetch(item, "uv", 0),
-                        feels_like=self.cnv.temperature(resilient_fetch(item, "feels_like", 20.0), True),
+                        air_temperature=self.cnv.temperature(resilient_fetch(item, "air_temperature", 20.0, self.ignore_fetch_errors)),
+                        sea_level_pressure=self.cnv.pressure(resilient_fetch(item, "sea_level_pressure", 0, self.ignore_fetch_errors)),
+                        relative_humidity=resilient_fetch(item, "relative_humidity", 0, self.ignore_fetch_errors),
+                        precip=self.cnv.rain(resilient_fetch(item, "precip", 0, self.ignore_fetch_errors)),
+                        precip_probability=resilient_fetch(item, "precip_probability", 0, self.ignore_fetch_errors),
+                        wind_avg=self.cnv.windspeed(resilient_fetch(item, "wind_avg", 0, self.ignore_fetch_errors), self.homeassistant),
+                        wind_direction=resilient_fetch(item, "wind_direction", 0, self.ignore_fetch_errors),
+                        wind_direction_cardinal=resilient_fetch(item, "wind_direction_cardinal", "N", self.ignore_fetch_errors),
+                        wind_gust=self.cnv.windspeed(resilient_fetch(item, "wind_gust", 0.0, self.ignore_fetch_errors), self.homeassistant),
+                        uv=resilient_fetch(item, "uv", 0, self.ignore_fetch_errors),
+                        feels_like=self.cnv.temperature(resilient_fetch(item, "feels_like", 20.0, self.ignore_fetch_errors), True),
                     )
                     entity_data.forecast_hourly.append(hour_item)
                     if hour_cnt >= self.forecast_hours:
