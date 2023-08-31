@@ -5,7 +5,7 @@ This document will contain a list of all major changes.
 ## [1.0.11] - 2023-08-31
 
 - Made changes, so that Fetch Errors are ignored by default. Currently this is only done for the Hourly Forecast, but will be implemented across all records.
-- With the above changes, it is now also possible to toggle this from the Integration. Requires 1.0.16 od the Integration.
+- With the above changes, it is now also possible to toggle this from the Integration. Requires 1.0.16 of the Integration.
 
 ## [1.0.10] - 2023-08-30
 
